@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: user-service
+  cloud:
+    config:
+      uri: http://localhost:8081
+
+  #TODO: FIX
+  main:
+    allow-bean-definition-overriding: true

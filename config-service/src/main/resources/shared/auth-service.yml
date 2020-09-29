@@ -1,0 +1,21 @@
+server:
+  port: 8084
+
+spring:
+  h2: # http://localhost:8084/h2-console/
+    console:
+      enabled: true # TODO: fix access
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/life_together
+    driverClassName: org.postgresql.Driver
+    username: test
+    password: pswd
+
+  jpa:
+    show-sql: true
+    database-platform: postgres
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect

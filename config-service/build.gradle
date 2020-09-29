@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.drsanches.config_service'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-config-server', version: '2.2.5.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.3.4.RELEASE'
+}

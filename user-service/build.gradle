@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.drsanches.user_service'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.3.3.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: '2.2.5.RELEASE'
+    implementation ('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.5.RELEASE') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.3.4.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.3.4.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-oauth2', version: '2.2.4.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.3.4.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.5.RELEASE'
+//    compile group: 'com.h2database', name: 'h2', version: '1.4.200'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.16'
+}

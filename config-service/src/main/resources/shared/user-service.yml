@@ -1,0 +1,33 @@
+server:
+  port: 8085
+
+security:
+  oauth2:
+    client:
+      clientId: user-service
+      clientSecret: ACCOUNT_SERVICE_PASSWORD
+      accessTokenUri: http://localhost:8084/oauth/token
+      tokenInfoUri: http://localhost:8084/oauth/check_token
+      grant-type: client_credentials
+      scope: server
+    resource:
+      userInfoUri: http://localhost:8084/current
+
+spring:
+  h2: # http://localhost:8085/h2-console/
+    console:
+      enabled: true # TODO: fix access
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/life_together
+    driverClassName: org.postgresql.Driver
+    username: test
+    password: pswd
+
+  jpa:
+    show-sql: true
+    database-platform: postgres
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
