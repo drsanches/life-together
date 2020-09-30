@@ -48,11 +48,11 @@ public class UserService {
         Optional<User> current = userRepository.findByUsername(username);
         Assert.isTrue(current.isPresent(), "can't find user: username=" + username);
         User currentUser = current.get();
-        if (!StringUtils.isEmpty(user.getUsername()) && !user.getUsername().equals(currentUser.getUsername())) {
+        if (!StringUtils.isEmpty(user.getUsername()) && !user.getUsername().equals(username)) {
             Optional<User> another = userRepository.findByUsername(user.getUsername());
             Assert.isTrue(another.isEmpty(), "user with username '" + username + "' already exists");
             currentUser.setUsername(user.getUsername());
-            authClient.changeUsername(new ChangeUsernameDTO(currentUser.getId(), user.getUsername()));
+            authClient.changeUsername(new ChangeUsernameDTO(username, user.getUsername()));
         }
         currentUser.setFirstName(user.getFirstName());
         currentUser.setLastName(user.getLastName());

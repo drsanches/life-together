@@ -2,19 +2,19 @@ package ru.drsanches.auth_service.data;
 
 public class ChangeUsernameDTO {
 
-    private String userId;
+    private String oldUsername;
 
     private String newUsername;
 
     public ChangeUsernameDTO() {}
 
-    public ChangeUsernameDTO(String userId, String newUsername) {
-        this.userId = userId;
+    public ChangeUsernameDTO(String oldUsername, String newUsername) {
+        this.oldUsername = oldUsername;
         this.newUsername = newUsername;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getOldUsername() {
+        return oldUsername;
     }
 
     public String getNewUsername() {

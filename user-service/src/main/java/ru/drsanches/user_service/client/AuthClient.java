@@ -14,8 +14,8 @@ public interface AuthClient {
     @RequestMapping(method = RequestMethod.POST, value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     void createUser(UserAuth userAuth);
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    void deleteUser(@PathVariable("id") String id);
+    @RequestMapping(value = "/{username}", method = RequestMethod.DELETE)
+    void deleteUser(@PathVariable("username") String username);
 
     @RequestMapping(value = "/", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     void changeUsername(ChangeUsernameDTO changeUsernameDTO);

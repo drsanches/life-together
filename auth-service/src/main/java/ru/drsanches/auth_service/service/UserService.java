@@ -29,20 +29,18 @@ public class UserService {
         LOG.info("new user has been created: id={}, username={}", user.getId(), user.getUsername());
     }
 
-    public void delete(String id) {
-        //TODO: Delete auth token
-        Optional<User> current = userRepository.findById(id);
-        Assert.isTrue(current.isPresent(), "can't find user: id=" + id);
+    public void delete(String username) {
+        Optional<User> current = userRepository.findByUsername(username);
+        Assert.isTrue(current.isPresent(), "can't find user: username=" + username);
         userRepository.delete(current.get());
         LOG.info("user has been deleted: id={}, username={}", current.get().getId(), current.get().getUsername());
     }
 
-    public void changeUsername(String id, String newUsername) {
-        //TODO: Update auth token
-        Optional<User> current = userRepository.findById(id);
-        Assert.isTrue(current.isPresent(), "can't find user: id=" + id);
+    public void changeUsername(String oldUsername, String newUsername) {
+        Optional<User> current = userRepository.findByUsername(oldUsername);
+        Assert.isTrue(current.isPresent(), "can't find user: username=" + oldUsername);
         Optional<User> another = userRepository.findByUsername(newUsername);
-        Assert.isTrue(another.isEmpty(), "user with username '" + newUsername + "' already exists");
+        Assert.isTrue(another.isEmpty(), "user already exists: username=" + newUsername);
         User currentUser = current.get();
         currentUser.setUsername(newUsername);
         userRepository.save(currentUser);
