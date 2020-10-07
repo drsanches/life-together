@@ -1,4 +1,4 @@
-package ru.drsanches.user_service.data;
+package ru.drsanches.user_service.data.dto;
 
 public class ChangeUsernameDTO {
 

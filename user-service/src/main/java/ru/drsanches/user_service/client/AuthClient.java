@@ -5,8 +5,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ru.drsanches.user_service.data.ChangeUsernameDTO;
-import ru.drsanches.user_service.data.UserAuth;
+import ru.drsanches.user_service.data.dto.ChangeUsernameDTO;
+import ru.drsanches.user_service.data.user.UserAuth;
 
 @FeignClient(name = "auth-service")
 public interface AuthClient {

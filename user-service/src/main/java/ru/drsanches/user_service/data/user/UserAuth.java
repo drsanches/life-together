@@ -1,4 +1,4 @@
-package ru.drsanches.user_service.data;
+package ru.drsanches.user_service.data.user;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;

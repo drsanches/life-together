@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final Logger LOG = LoggerFactory.getLogger(UserService.class);
+    private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private static final BCryptPasswordEncoder ENCODER = new BCryptPasswordEncoder();
 
@@ -26,14 +26,14 @@ public class UserService {
         String hash = ENCODER.encode(user.getPassword());
         user.setPassword(hash);
         userRepository.save(user);
-        LOG.info("new user has been created: id={}, username={}", user.getId(), user.getUsername());
+        log.info("new user has been created: id={}, username={}", user.getId(), user.getUsername());
     }
 
     public void delete(String username) {
         Optional<User> current = userRepository.findByUsername(username);
         Assert.isTrue(current.isPresent(), "can't find user: username=" + username);
         userRepository.delete(current.get());
-        LOG.info("user has been deleted: id={}, username={}", current.get().getId(), current.get().getUsername());
+        log.info("user has been deleted: id={}, username={}", current.get().getId(), current.get().getUsername());
     }
 
     public void changeUsername(String oldUsername, String newUsername) {
@@ -44,6 +44,6 @@ public class UserService {
         User currentUser = current.get();
         currentUser.setUsername(newUsername);
         userRepository.save(currentUser);
-        LOG.info("username has been changed: id={}, username={}", currentUser.getId(), currentUser.getUsername());
+        log.info("username has been changed: id={}, username={}", currentUser.getId(), currentUser.getUsername());
     }
 }
