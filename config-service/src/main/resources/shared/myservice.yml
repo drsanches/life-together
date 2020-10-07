@@ -1,5 +1,0 @@
-server:
-  port: 8083
-
-my:
-  value: testValue

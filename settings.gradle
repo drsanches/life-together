@@ -1,6 +1,5 @@
 rootProject.name = 'life-together'
 include 'config-service'
-include 'myservice'
 include 'auth-service'
 include 'registry-service'
 include 'user-service'
