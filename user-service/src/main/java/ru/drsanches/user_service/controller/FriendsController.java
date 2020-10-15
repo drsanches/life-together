@@ -1,4 +1,4 @@
-package ru.drsanches.user_service.controllers;
+package ru.drsanches.user_service.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -13,3 +13,9 @@ eureka:
     fetchRegistry: false
     server:
       waitTimeInMsWhenSyncEmpty: 0
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    ru.drsanches.registry_service: INFO

@@ -1,5 +1,6 @@
-package ru.drsanches.user_service.data.dto;
+package ru.drsanches.common.dto;
 
+//TODO: Add validation
 public class ChangeUsernameDTO {
 
     private String oldUsername;

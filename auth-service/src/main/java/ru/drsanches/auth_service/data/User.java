@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.List;
 
+//TODO: Add validation
 @Entity
 @Table(name="auth_user")
 public class User implements UserDetails {
@@ -16,11 +17,14 @@ public class User implements UserDetails {
     @Column
     private String id;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
     @Column
     private String password;
+
+    @Column
+    private boolean enabled;
 
     public String getId() {
         return id;
@@ -44,6 +48,10 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public void setEnable(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -61,7 +69,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     @Override

@@ -9,3 +9,9 @@ spring:
       server:
         native:
           search-locations: classpath:/shared
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    ru.drsanches.config_service: INFO

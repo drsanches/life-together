@@ -1,9 +1,10 @@
-package ru.drsanches.user_service.data.user;
+package ru.drsanches.user_service.data.dto;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-public class UserAuth {
+//TODO: Add validation
+public class UserAuthDTO {
 
     private String id;
 
@@ -13,7 +14,7 @@ public class UserAuth {
     @NotNull
     private String password;
 
-    public UserAuth() {
+    public UserAuthDTO() {
         id = UUID.randomUUID().toString();
     }
 

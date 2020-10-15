@@ -1,5 +1,9 @@
 rootProject.name = 'life-together'
+include 'common'
 include 'config-service'
 include 'auth-service'
 include 'registry-service'
 include 'user-service'
+//TODO
+//include 'debts-service'
+

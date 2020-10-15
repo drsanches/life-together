@@ -5,7 +5,7 @@ plugins {
 group 'ru.drsanches.auth_service'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
@@ -24,4 +24,5 @@ dependencies {
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.16'
 //    compile group: 'com.h2database', name: 'h2', version: '1.4.200'
     implementation 'org.glassfish.jaxb:jaxb-runtime'
+    compile project(':common')
 }

@@ -1,4 +1,4 @@
-package ru.drsanches.user_service.controllers;
+package ru.drsanches.user_service.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.drsanches.user_service.data.user.UserAuth;
+import ru.drsanches.user_service.data.dto.UserAuthDTO;
 import ru.drsanches.user_service.data.dto.UserDTO;
 import ru.drsanches.user_service.service.UserService;
 import javax.validation.Valid;
@@ -27,7 +27,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
-    public UserDTO createUser(@Valid @RequestBody UserAuth user) {
+    public UserDTO createUser(@RequestBody UserAuthDTO user) {
         return userService.create(user);
     }
 
@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @RequestMapping(path = "/current", method = RequestMethod.DELETE)
-    public void deleteCurrentUser(Principal principal) {
-        userService.delete(principal.getName());
+    public void disableCurrentUser(Principal principal) {
+        userService.disable(principal.getName());
     }
 
     @RequestMapping(path = "/{username}", method = RequestMethod.GET)

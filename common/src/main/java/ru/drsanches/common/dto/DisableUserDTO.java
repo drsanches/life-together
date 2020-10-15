@@ -1,16 +1,23 @@
-package ru.drsanches.auth_service.data;
+package ru.drsanches.common.dto;
 
-public class ChangeUsernameDTO {
+public class DisableUserDTO {
+
+    private String id;
 
     private String oldUsername;
 
     private String newUsername;
 
-    public ChangeUsernameDTO() {}
+    public DisableUserDTO() {}
 
-    public ChangeUsernameDTO(String oldUsername, String newUsername) {
+    public DisableUserDTO(String id, String oldUsername, String newUsername) {
+        this.id = id;
         this.oldUsername = oldUsername;
         this.newUsername = newUsername;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getOldUsername() {

@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
+import ru.drsanches.common.dto.ChangeUsernameDTO;
+import ru.drsanches.common.dto.DisableUserDTO;
 import ru.drsanches.user_service.client.AuthClient;
-import ru.drsanches.user_service.data.dto.ChangeUsernameDTO;
 import ru.drsanches.user_service.data.dto.UserDTO;
 import ru.drsanches.user_service.data.user.User;
-import ru.drsanches.user_service.data.user.UserAuth;
+import ru.drsanches.user_service.data.dto.UserAuthDTO;
 import ru.drsanches.user_service.data.user.UserRepository;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,13 +33,14 @@ public class UserService {
     @Autowired
     private UserConverter userConverter;
 
-    public UserDTO create(UserAuth userAuth) {
-        checkNonexistentUser(userAuth.getUsername());
+    //TODO: Make transaction
+    public UserDTO create(UserAuthDTO userAuthDTO) {
+        checkNonexistentUser(userAuthDTO.getUsername());
         String id = UUID.randomUUID().toString();
-        userAuth.setId(id);
-        authClient.createUser(userAuth);
+        userAuthDTO.setId(id);
+        authClient.createUser(userAuthDTO);
         User user = new User(id);
-        user.setUsername(userAuth.getUsername());
+        user.setUsername(userAuthDTO.getUsername());
         userRepository.save(user);
         log.info("new user has been created: id={}, username={}", user.getId(), user.getUsername());
         return userConverter.convertToDTO(user);
@@ -48,26 +50,30 @@ public class UserService {
         return userConverter.convertToDTO(getUserIfExists(username));
     }
 
-    public UserDTO update(String username, UserDTO user) {
+    //TODO: Make transaction
+    public UserDTO update(String username, UserDTO userDTO) {
         User current = getUserIfExists(username);
-        if (!StringUtils.isEmpty(user.getUsername()) && !user.getUsername().equals(username)) {
-            checkNonexistentUser(user.getUsername());
-            current.setUsername(user.getUsername());
-            authClient.changeUsername(new ChangeUsernameDTO(username, user.getUsername()));
+        if (!StringUtils.isEmpty(userDTO.getUsername()) && !userDTO.getUsername().equals(username)) {
+            checkNonexistentUser(userDTO.getUsername());
+            current.setUsername(userDTO.getUsername());
+            authClient.changeUsername(new ChangeUsernameDTO(username, userDTO.getUsername()));
         }
-        current.setFirstName(user.getFirstName());
-        current.setLastName(user.getLastName());
+        current.setFirstName(userDTO.getFirstName());
+        current.setLastName(userDTO.getLastName());
         userRepository.save(current);
-        log.info("user has been saved: id={}, username={}", user.getId(), user.getUsername());
+        log.info("user has been saved: id={}, username={}", userDTO.getId(), userDTO.getUsername());
         return userConverter.convertToDTO(current);
     }
 
-    public void delete(String username) {
+    //TODO: Make transaction
+    public void disable(String username) {
         User current = getUserIfExists(username);
-        authClient.deleteUser(current.getUsername());
-        friendsService.deleteUser(current.getUsername());
-        userRepository.delete(current);
-        log.info("user has been deleted: id={}, username={}", current.getId(), current.getUsername());
+        current.setUsername(current.getUsername() + "_" + UUID.randomUUID().toString());
+        current.setEnable(false);
+        authClient.disableUser(new DisableUserDTO(current.getId(), username, current.getUsername()));
+        friendsService.deleteUser(username);
+        userRepository.save(current);
+        log.info("user has been disabled: id={}, username={}", current.getId(), current.getUsername());
     }
 
     private User getUserIfExists(String username) {

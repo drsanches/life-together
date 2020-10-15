@@ -2,6 +2,7 @@ package ru.drsanches.auth_service.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,9 @@ import javax.sql.DataSource;
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
+
+    @Value("${service-secrets.user-service}")
+    String userServiceSecret;
 
     @Autowired
     @Qualifier("authenticationManagerBean")
@@ -42,10 +46,15 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .scopes("ui")
                 .and()
                 .withClient("user-service")
-               //TODO: use variable
-                .secret("ACCOUNT_SERVICE_PASSWORD")
+                .secret(userServiceSecret)
                 .authorizedGrantTypes("client_credentials", "refresh_token")
-                .scopes("server");
+                .scopes("server")
+                .and()
+                .withClient("debts-service");
+//               TODO:
+//                .secret("DEBTS_SERVICE_PASSWORD")
+//                .authorizedGrantTypes("client_credentials", "refresh_token")
+//                .scopes("server");
     }
 
     @Override

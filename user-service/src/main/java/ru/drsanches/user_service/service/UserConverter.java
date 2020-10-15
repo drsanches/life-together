@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.drsanches.user_service.data.dto.UserDTO;
 import ru.drsanches.user_service.data.user.User;
 
-//TODO: refactor
 @Service
 public class UserConverter {
 

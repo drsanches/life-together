@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.drsanches.common'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}

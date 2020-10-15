@@ -2,6 +2,7 @@ package ru.drsanches.user_service.data.user;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import ru.drsanches.user_service.data.friends.Friends;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -18,11 +19,17 @@ public class User {
     @Id
     private String id;
 
+    @Column(unique = true)
     private String username;
 
+    @Column
     private String firstName;
 
+    @Column
     private String lastName;
+
+    @Column
+    private boolean enabled;
 
     @OneToMany(mappedBy = "fromUser", fetch= FetchType.EAGER)
     private Set<Friends> outgoingRequests;
@@ -34,6 +41,7 @@ public class User {
 
     public User(String id) {
         this.id = id;
+        this.enabled = true;
     }
 
     public String getId() {
@@ -50,6 +58,10 @@ public class User {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public Set<Friends> getOutgoingRequests() {
@@ -70,5 +82,9 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setEnable(boolean enabled) {
+        this.enabled = enabled;
     }
 }

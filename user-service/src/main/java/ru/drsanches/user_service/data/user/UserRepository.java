@@ -4,6 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
+//TODO: add filter by enabled users
 //TODO: do something with repository name
 @Repository("ru.drsanches.user_service.data.user.UserRepository")
 public interface UserRepository extends CrudRepository<User, String> {

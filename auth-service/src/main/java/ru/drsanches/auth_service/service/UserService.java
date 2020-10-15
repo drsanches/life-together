@@ -15,7 +15,7 @@ public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    private static final BCryptPasswordEncoder ENCODER = new BCryptPasswordEncoder();
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     private UserRepository userRepository;
@@ -23,17 +23,21 @@ public class UserService {
     public void create(User user) {
         Optional<User> existing = userRepository.findByUsername(user.getUsername());
         existing.ifPresent(it -> {throw new IllegalArgumentException("User already exists: " + it.getUsername());});
-        String hash = ENCODER.encode(user.getPassword());
+        String hash = encoder.encode(user.getPassword());
         user.setPassword(hash);
+        user.setEnable(true);
         userRepository.save(user);
         log.info("new user has been created: id={}, username={}", user.getId(), user.getUsername());
     }
 
-    public void delete(String username) {
-        Optional<User> current = userRepository.findByUsername(username);
-        Assert.isTrue(current.isPresent(), "can't find user: username=" + username);
-        userRepository.delete(current.get());
-        log.info("user has been deleted: id={}, username={}", current.get().getId(), current.get().getUsername());
+    public void disable(String userId, String newUsername) {
+        Optional<User> current = userRepository.findById(userId);
+        Assert.isTrue(current.isPresent(), "can't find user: id=" + userId);
+        User currentUser = current.get();
+        currentUser.setUsername(newUsername);
+        currentUser.setEnable(false);
+        userRepository.save(currentUser);
+        log.info("user has been disabled: id={}, username={}", current.get().getId(), current.get().getUsername());
     }
 
     public void changeUsername(String oldUsername, String newUsername) {

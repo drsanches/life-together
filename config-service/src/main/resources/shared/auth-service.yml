@@ -1,6 +1,9 @@
 server:
   port: 8084
 
+service-secrets:
+  user-service: USER_SERVICE_PASSWORD
+
 spring:
   h2: # http://localhost:8084/h2-console/
     console:
@@ -13,7 +16,7 @@ spring:
     password: pswd
 
   jpa:
-    show-sql: true
+    show-sql: false
     database-platform: postgres
     generate-ddl: true
     properties:

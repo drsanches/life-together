@@ -4,3 +4,9 @@ spring:
   cloud:
     config:
       uri: http://localhost:8081
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    ru.drsanches.auth_service: INFO

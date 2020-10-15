@@ -8,3 +8,9 @@ spring:
   #TODO: FIX
   main:
     allow-bean-definition-overriding: true
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    ru.drsanches.user_service: INFO
