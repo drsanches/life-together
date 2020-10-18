@@ -21,8 +21,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public void create(User user) {
-        Optional<User> existing = userRepository.findByUsername(user.getUsername());
-        existing.ifPresent(it -> {throw new IllegalArgumentException("User already exists: " + it.getUsername());});
+        checkNonexistentUser(user.getUsername());
         String hash = encoder.encode(user.getPassword());
         user.setPassword(hash);
         user.setEnable(true);
@@ -31,23 +30,37 @@ public class UserService {
     }
 
     public void disable(String userId, String newUsername) {
-        Optional<User> current = userRepository.findById(userId);
-        Assert.isTrue(current.isPresent(), "can't find user: id=" + userId);
-        User currentUser = current.get();
-        currentUser.setUsername(newUsername);
-        currentUser.setEnable(false);
-        userRepository.save(currentUser);
-        log.info("user has been disabled: id={}, username={}", current.get().getId(), current.get().getUsername());
+        User user = getUserByIdIfExists(userId);
+        user.setUsername(newUsername);
+        user.setEnable(false);
+        userRepository.save(user);
+        log.info("user has been disabled: id={}, username={}", user.getId(), user.getUsername());
     }
 
     public void changeUsername(String oldUsername, String newUsername) {
-        Optional<User> current = userRepository.findByUsername(oldUsername);
-        Assert.isTrue(current.isPresent(), "can't find user: username=" + oldUsername);
-        Optional<User> another = userRepository.findByUsername(newUsername);
-        Assert.isTrue(another.isEmpty(), "user already exists: username=" + newUsername);
-        User currentUser = current.get();
-        currentUser.setUsername(newUsername);
-        userRepository.save(currentUser);
-        log.info("username has been changed: id={}, username={}", currentUser.getId(), currentUser.getUsername());
+        User current = getUserByUsernameIfExists(oldUsername);
+        checkNonexistentUser(newUsername);
+        current.setUsername(newUsername);
+        userRepository.save(current);
+        log.info("username has been changed: id={}, username={}", current.getId(), current.getUsername());
+    }
+
+    private User getUserByUsernameIfExists(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        Assert.isTrue(user.isPresent(), "can't find user: username=" + username);
+        Assert.isTrue(user.get().isEnabled(), "can't find user: username=" + username);
+        return user.get();
+    }
+
+    private User getUserByIdIfExists(String userId) {
+        Optional<User> user = userRepository.findById(userId);
+        Assert.isTrue(user.isPresent(), "can't find user: id=" + userId);
+        Assert.isTrue(user.get().isEnabled(), "can't find user: id=" + userId);
+        return user.get();
+    }
+
+    private void checkNonexistentUser(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        Assert.isTrue(user.isEmpty(), "user already exists: " + username);
     }
 }

@@ -71,7 +71,7 @@ public class UserService {
         current.setUsername(current.getUsername() + "_" + UUID.randomUUID().toString());
         current.setEnable(false);
         authClient.disableUser(new DisableUserDTO(current.getId(), username, current.getUsername()));
-        friendsService.deleteUser(username);
+        friendsService.disableUser(username);
         userRepository.save(current);
         log.info("user has been disabled: id={}, username={}", current.getId(), current.getUsername());
     }
@@ -79,6 +79,7 @@ public class UserService {
     private User getUserIfExists(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         Assert.isTrue(user.isPresent(), "can't find user: username=" + username);
+        Assert.isTrue(user.get().isEnabled(), "can't find user: username=" + username);
         return user.get();
     }
 

@@ -55,7 +55,7 @@ public class FriendsService {
         log.info("User '{}' deleted friend request to '{}'", fromUsername, toUsername);
     }
 
-    public void deleteUser(String username) {
+    public void disableUser(String username) {
         User user = getUserIfExists(username);
         friendsRepository.deleteAll(friendsRepository.findByFromUser(user));
         friendsRepository.deleteAll(friendsRepository.findByToUser(user));
@@ -79,6 +79,7 @@ public class FriendsService {
     private User getUserIfExists(String username) {
         Optional<User> user = userRepository.findByUsername(username);
         Assert.isTrue(user.isPresent(), "can't find user: username=" + username);
+        Assert.isTrue(user.get().isEnabled(), "can't find user: username=" + username);
         return user.get();
     }
 }
