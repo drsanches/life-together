@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
 }
 
 group 'ru.drsanches.registry_service'
@@ -17,4 +18,5 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
     implementation ('org.springframework.cloud:spring-cloud-starter-config:2.2.5.RELEASE')
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.3.4.RELEASE'
 }

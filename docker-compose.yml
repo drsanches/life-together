@@ -1,0 +1,54 @@
+# FIRST RUN:
+# gradlew clean
+# gradlew bootJar
+
+version: '3'
+
+services:
+  config-service:
+    build: config-service/
+    restart: always
+    ports:
+      - 8081:8081
+
+  registry-service:
+    build: registry-service/
+    restart: always
+    depends_on:
+      - config-service
+    ports:
+      - 8761:8761
+
+  auth-service:
+    build: auth-service/
+    restart: always
+    depends_on:
+      - config-service
+      - registry-service
+      - database
+    ports:
+    - 8084:8084
+
+  user-service:
+    build: user-service/
+    restart: always
+    depends_on:
+      - config-service
+      - registry-service
+      - database
+      - auth-service
+    ports:
+    - 8085:8085
+
+ #TODO: FIX
+  database:
+    build: database/
+    restart: always
+#    volumes:
+#      - ./db/data/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pswd
+      POSTGRES_DATABASE: postgres
+    ports:
+      - 5432:5432

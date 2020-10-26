@@ -1,6 +1,9 @@
+#TODO: Set security
+
 server:
   port: 8081
 
+#TODO: add configuration refresh
 spring:
   profiles:
     active: native

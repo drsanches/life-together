@@ -1,20 +1,25 @@
+#TODO: Fix actuator access
+
 server:
   port: 8084
 
 service-secrets:
   user-service: USER_SERVICE_PASSWORD
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://registry-service:8761/eureka/
+
 spring:
   h2: # http://localhost:8084/h2-console/
     console:
       enabled: true # TODO: fix access
-
   datasource:
-    url: jdbc:postgresql://localhost:5432/life_together
+    url: jdbc:postgresql://database:5432/postgres
     driverClassName: org.postgresql.Driver
-    username: test
+    username: postgres
     password: pswd
-
   jpa:
     show-sql: false
     database-platform: postgres
