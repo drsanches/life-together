@@ -4,6 +4,7 @@ include 'config-service'
 include 'auth-service'
 include 'registry-service'
 include 'user-service'
+include 'tests'
 //TODO
 //include 'debts-service'
 
