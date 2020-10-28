@@ -30,6 +30,7 @@ public class FriendsController {
     }
 
     @RequestMapping(path = "/{username}", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     public void sendRequest(Principal principal, @PathVariable String username) {
         friendsService.sendRequest(principal.getName(), username);
     }

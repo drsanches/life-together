@@ -27,6 +27,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@RequestBody UserAuthDTO user) {
         return userService.create(user);
     }
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/current", method = RequestMethod.PUT)
-    public UserDTO updateCurrentUser(Principal principal, @Valid @RequestBody UserDTO user) {
+    public UserDTO updateCurrentUser(Principal principal, @RequestBody UserDTO user) {
         return userService.update(principal.getName(), user);
     }
 
@@ -51,7 +52,7 @@ public class UserController {
         return userService.findByUsername(username);
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ IllegalArgumentException.class })
     public String handleException(Exception e) {
         log.error("Exception was successfully handled: " + e.getClass() + ": " + e.getMessage(), e);

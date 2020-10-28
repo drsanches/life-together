@@ -36,6 +36,7 @@ public class UserController {
 
     @PreAuthorize("#oauth2.hasScope('server')")
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     public void createUser(@RequestBody User user) {
         userService.create(user);
     }
@@ -66,7 +67,7 @@ public class UserController {
         });
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ IllegalArgumentException.class })
     public String handleException(Exception e) {
         log.error("Exception was successfully handled: " + e.getClass() + ": " + e.getMessage(), e);

@@ -31,10 +31,11 @@ public class UserService {
 
     public void disable(String userId, String newUsername) {
         User user = getUserByIdIfExists(userId);
+        String oldUsername = user.getUsername();
         user.setUsername(newUsername);
         user.setEnable(false);
         userRepository.save(user);
-        log.info("user has been disabled: id={}, username={}", user.getId(), user.getUsername());
+        log.info("user has been disabled: id={}, oldUsername={}, newUsername={}", user.getId(), oldUsername, newUsername);
     }
 
     public void changeUsername(String oldUsername, String newUsername) {

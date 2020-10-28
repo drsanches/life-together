@@ -19,9 +19,21 @@ class RequestUtils {
         return new RESTClient( "$SERVER_URL:$USER_PORT")
     }
 
+    static JSONObject createUser(String username, String password) {
+        HttpResponseDecorator response = getUserRestClient().post(
+                path: '/user/registration',
+                body:  [username: username,
+                        password: password],
+                requestContentType : ContentType.JSON)
+        return response.getData()
+    }
+
     static JSONObject getUser(String username, String password) {
+        String token = getToken(username, password)
+        if (token == null) {
+            return null
+        }
         try {
-            String token = getToken(username, password)
             HttpResponseDecorator response = getUserRestClient().get(
                     path: "user/current",
                     headers: ["Authorization": "Bearer $token"])
@@ -31,19 +43,50 @@ class RequestUtils {
         }
     }
 
+    static JSONObject getUser(String token) {
+        try {
+            HttpResponseDecorator response = getUserRestClient().get(
+                    path: "user/current",
+                    headers: ["Authorization": "Bearer $token"])
+            return response.status == 200 ? response.getData() : null
+        } catch(Exception e) {
+            return null
+        }
+    }
+
+    static JSONObject updateUser(String username, String password, JSONObject user) {
+        String token = getToken(username, password)
+        if (token == null) {
+            return null
+        }
+        try {
+            HttpResponseDecorator response = getUserRestClient().put(
+                    path: '/user/current',
+                    headers: ["Authorization": "Bearer $token"],
+                    body:  user,
+                    requestContentType : ContentType.JSON)
+            return response.status == 200 ? response.getData() : null
+        } catch(Exception e) {
+            return null
+        }
+    }
+
     static String getToken(String username, String password) {
-        HttpResponseDecorator response = getAuthRestClient().post(
-                path: "oauth/token",
-                headers: [
-                        //TODO: Fix in code
-                        "Authorization": "Basic YnJvd3Nlcjo=",
-                        "Content-Type": "application/x-www-form-urlencoded"
-                ],
-                body: ["username": username,
-                        "password": password,
-                        "grant_type": "password",
-                        "scope": "ui"],
-                requestContentType : ContentType.URLENC)
-        return response.getData()["access_token"]
+        try {
+            HttpResponseDecorator response = getAuthRestClient().post(
+                    path: "oauth/token",
+                    headers: [
+                            //TODO: Fix in code
+                            "Authorization": "Basic YnJvd3Nlcjo="
+                    ],
+                    body: ["username": username,
+                            "password": password,
+                            "grant_type": "password",
+                            "scope": "ui"],
+                    requestContentType : ContentType.URLENC)
+            return response.status == 200 ? response.getData()["access_token"] : null
+        } catch (Exception e) {
+            return null
+        }
     }
 }

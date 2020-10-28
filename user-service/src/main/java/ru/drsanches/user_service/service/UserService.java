@@ -61,19 +61,20 @@ public class UserService {
         current.setFirstName(userDTO.getFirstName());
         current.setLastName(userDTO.getLastName());
         userRepository.save(current);
-        log.info("user has been saved: id={}, username={}", userDTO.getId(), userDTO.getUsername());
+        log.info("user has been updated: id={}, username={}", current.getId(), userDTO.getUsername());
         return userConverter.convertToDTO(current);
     }
 
     //TODO: Make transaction
     public void disable(String username) {
         User current = getUserIfExists(username);
-        current.setUsername(current.getUsername() + "_" + UUID.randomUUID().toString());
-        current.setEnable(false);
-        authClient.disableUser(new DisableUserDTO(current.getId(), username, current.getUsername()));
+        String newUsername = current.getUsername() + "_" + UUID.randomUUID().toString();
+        authClient.disableUser(new DisableUserDTO(current.getId(), username, newUsername));
         friendsService.disableUser(username);
+        current.setUsername(newUsername);
+        current.setEnable(false);
         userRepository.save(current);
-        log.info("user has been disabled: id={}, username={}", current.getId(), current.getUsername());
+        log.info("user has been disabled: id={}, oldUsername={}, newUsername={}", current.getId(), username, newUsername);
     }
 
     private User getUserIfExists(String username) {
