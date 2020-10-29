@@ -71,6 +71,8 @@ public class UserService {
         String newUsername = current.getUsername() + "_" + UUID.randomUUID().toString();
         authClient.disableUser(new DisableUserDTO(current.getId(), username, newUsername));
         friendsService.disableUser(username);
+        current.getOutgoingRequests().clear();
+        current.getIncomingRequests().clear();
         current.setUsername(newUsername);
         current.setEnable(false);
         userRepository.save(current);
