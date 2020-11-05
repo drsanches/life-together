@@ -51,10 +51,6 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .scopes("server")
                 .and()
                 .withClient("debts-service");
-//               TODO:
-//                .secret("DEBTS_SERVICE_PASSWORD")
-//                .authorizedGrantTypes("client_credentials", "refresh_token")
-//                .scopes("server");
     }
 
     @Override

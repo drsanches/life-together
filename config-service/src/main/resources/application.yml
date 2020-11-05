@@ -1,5 +1,3 @@
-#TODO: Set security
-
 server:
   port: 8081
 
@@ -12,6 +10,9 @@ spring:
       server:
         native:
           search-locations: classpath:/shared
+  security:
+    user:
+      password: CONFIG_SERVICE_PASSWORD
 
 logging:
   level:
