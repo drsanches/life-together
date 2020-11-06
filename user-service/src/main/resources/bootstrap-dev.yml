@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: user-service-dev
+  cloud:
+    config:
+      uri: http://localhost:8081
+      fail-fast: true
+      username: user
+      password: CONFIG_SERVICE_PASSWORD
+
+  #TODO: FIX
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    ru.drsanches.user_service: INFO

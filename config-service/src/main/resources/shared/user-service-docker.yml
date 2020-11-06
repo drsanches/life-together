@@ -1,25 +1,38 @@
 #TODO: Fix actuator access
 
 server:
-  port: 8084
-
-service-secrets:
-  user-service: USER_SERVICE_PASSWORD
+  port: 8085
 
 eureka:
   client:
     serviceUrl:
       defaultZone: http://registry-service:8761/eureka/
 
+security:
+  oauth2:
+    client:
+      clientId: user-service
+      clientSecret: USER_SERVICE_PASSWORD
+      accessTokenUri: http://auth-service:8084/oauth/token
+      tokenInfoUri: http://auth-service:8084/oauth/check_token
+      grant-type: client_credentials
+      scope: server
+    resource:
+      userInfoUri: http://auth-service:8084/current
+
 spring:
-  h2: # http://localhost:8084/h2-console/
+  application:
+    name: user-service
+  h2: # http://localhost:8085/h2-console/
     console:
       enabled: true # TODO: fix access
+
   datasource:
     url: jdbc:postgresql://database:5432/postgres
     driverClassName: org.postgresql.Driver
     username: postgres
     password: pswd
+
   jpa:
     show-sql: false
     database-platform: postgres

@@ -1,7 +1,7 @@
 FROM openjdk:11
 
 ADD ./build/libs/auth-service-1.0-SNAPSHOT.jar /app/
-CMD ["java", "-jar", "/app/auth-service-1.0-SNAPSHOT.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=docker", "/app/auth-service-1.0-SNAPSHOT.jar"]
 
 #TODO: HEALTHCHECK
 

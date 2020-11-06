@@ -1,6 +1,6 @@
 spring:
   application:
-    name: auth-service
+    name: auth-service-docker
   cloud:
     config:
       uri: http://config-service:8081
