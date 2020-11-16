@@ -118,6 +118,23 @@ class TestRemoveRequest extends Specification {
         assert e.response.status == 400
     }
 
+    def "delete current user request"() {
+        given: "user"
+        def username1 = DataGenerator.createValidUsername()
+        def password1 = DataGenerator.createValidPassword()
+        RequestUtils.createUser(username1, password1)
+        def token1 = UUID.randomUUID().toString()
+
+        when: "sendRequest is called with invalid token"
+        RequestUtils.getUserRestClient().delete(
+                path: "/friends/$username1",
+                headers: ["Authorization": "Bearer $token1"])
+
+        then: "response is correct"
+        HttpResponseException e = thrown(HttpResponseException)
+        assert e.response.status == 401
+    }
+
     def "delete request with invalid token"() {
         given: "two users"
         def username1 = DataGenerator.createValidUsername()

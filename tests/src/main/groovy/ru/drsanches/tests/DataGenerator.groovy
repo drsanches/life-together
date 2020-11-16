@@ -17,4 +17,8 @@ class DataGenerator {
     static String createValidLastName() {
         return UUID.randomUUID().toString()
     }
+
+    static Integer createValidMoney() {
+        return Math.abs(new Random().nextInt())
+    }
 }

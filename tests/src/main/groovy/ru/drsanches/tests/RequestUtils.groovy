@@ -11,6 +11,7 @@ class RequestUtils {
     static String SERVER_URL = "http://localhost"
     static String AUTH_PORT = "8084"
     static String USER_PORT = "8085"
+    static String DEBTS_PORT = "8086"
 
     static RESTClient getAuthRestClient() {
         return new RESTClient( "$SERVER_URL:$AUTH_PORT")
@@ -18,6 +19,10 @@ class RequestUtils {
 
     static RESTClient getUserRestClient() {
         return new RESTClient( "$SERVER_URL:$USER_PORT")
+    }
+
+    static RESTClient getDebtsRestClient() {
+        return new RESTClient( "$SERVER_URL:$DEBTS_PORT")
     }
 
     static JSONObject createUser(String username, String password) {
@@ -40,6 +45,7 @@ class RequestUtils {
                     headers: ["Authorization": "Bearer $token"])
             return response.status == 200 ? response.getData() : null
         } catch(Exception e) {
+            e.printStackTrace()
             return null
         }
     }
@@ -51,6 +57,7 @@ class RequestUtils {
                     headers: ["Authorization": "Bearer $token"])
             return response.status == 200 ? response.getData() : null
         } catch(Exception e) {
+            e.printStackTrace()
             return null
         }
     }
@@ -68,6 +75,7 @@ class RequestUtils {
                     requestContentType : ContentType.JSON)
             return response.status == 200 ? response.getData() : null
         } catch(Exception e) {
+            e.printStackTrace()
             return null
         }
     }
@@ -92,6 +100,7 @@ class RequestUtils {
                     requestContentType : ContentType.JSON)
             return response.status == 200 ? response.getData() : null
         } catch(Exception e) {
+            e.printStackTrace()
             return null
         }
     }
@@ -108,6 +117,7 @@ class RequestUtils {
                     requestContentType : ContentType.JSON)
             return response.status == 200 ? response.getData() : null
         } catch(Exception e) {
+            e.printStackTrace()
             return null
         }
     }
@@ -124,17 +134,62 @@ class RequestUtils {
                     requestContentType : ContentType.JSON)
             return response.status == 200 ? response.getData() : null
         } catch(Exception e) {
+            e.printStackTrace()
             return null
         }
     }
 
+    static JSONObject getDebts(String username, String password) {
+        String token = getToken(username, password)
+        if (token == null) {
+            return null
+        }
+        try {
+            HttpResponseDecorator response = getDebtsRestClient().get(
+                    path: "/debts",
+                    headers: ["Authorization": "Bearer $token"],
+                    requestContentType : ContentType.JSON)
+            return response.status == 200 ? response.getData() : null
+        } catch(Exception e) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    static void sendMoney(String username, String password, List<String> toUserIdList, int money) {
+        String token = getToken(username, password)
+        getDebtsRestClient().post(
+                path: "/debts/send/",
+                headers: ["Authorization": "Bearer $token"],
+                body: [toUserIdList: toUserIdList,
+                       money: money],
+                requestContentType: ContentType.JSON)
+    }
+
+    static void deleteFriend(String username, String password, String friendUsername) {
+        String token = getToken(username, password)
+        getUserRestClient().delete(
+                path: "/friends/$friendUsername",
+                headers: ["Authorization": "Bearer $token"],
+                requestContentType : ContentType.JSON)
+    }
+
+    static void disableUser(String username, String password) {
+        String token = getToken(username, password)
+        getUserRestClient().delete(
+                path: "/user/current",
+                headers: ["Authorization": "Bearer $token"],
+                requestContentType: ContentType.JSON)
+    }
+
     static String getToken(String username, String password) {
         try {
+            String client = "browser:".bytes.encodeBase64().toString()
             HttpResponseDecorator response = getAuthRestClient().post(
                     path: "oauth/token",
                     headers: [
                             //TODO: Fix in code
-                            "Authorization": "Basic YnJvd3Nlcjo="
+                            "Authorization": "Basic $client"
                     ],
                     body: ["username": username,
                             "password": password,
@@ -143,6 +198,7 @@ class RequestUtils {
                     requestContentType : ContentType.URLENC)
             return response.status == 200 ? response.getData()["access_token"] : null
         } catch (Exception e) {
+            e.printStackTrace()
             return null
         }
     }

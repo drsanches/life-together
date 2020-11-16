@@ -40,9 +40,18 @@ services:
       - config-service
       - registry-service
       - database
-      - auth-service
     ports:
     - 8085:8085
+
+  debts-service:
+    build: debts-service/
+    restart: always
+    depends_on:
+      - config-service
+      - registry-service
+      - database
+    ports:
+    - 8086:8086
 
  #TODO: FIX
   database:

@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import ru.drsanches.common.dto.FriendsDTO;
+import ru.drsanches.user_service.client.DebtsClient;
 import ru.drsanches.user_service.data.friends.Friends;
+import ru.drsanches.user_service.data.friends.FriendsKey;
 import ru.drsanches.user_service.data.friends.FriendsRepository;
 import ru.drsanches.user_service.data.user.User;
 import ru.drsanches.user_service.data.dto.UserDTO;
@@ -28,6 +31,9 @@ public class FriendsService {
     @Autowired
     private UserConverter userConverter;
 
+    @Autowired
+    private DebtsClient debtsClient;
+
     public Set<UserDTO> getFriends(String username) {
         User user = getUserIfExists(username);
         Set<User> outgoing = user.getOutgoingRequests().stream().map(Friends::getToUser).collect(Collectors.toSet());
@@ -39,10 +45,15 @@ public class FriendsService {
         Assert.isTrue(!fromUsername.equals(toUsername), "users are equal: username=" + fromUsername);
         User fromUser = getUserIfExists(fromUsername);
         User toUser = getUserIfExists(toUsername);
-        Optional<Friends> friends = friendsRepository.findByFromUserAndToUser(fromUser, toUser);
-        Assert.isTrue(friends.isEmpty(), "friends already exists: fromUsername=" + fromUsername + ", toUsername=" + toUsername);
+        Optional<Friends> newFriends = friendsRepository.findByFromUserAndToUser(fromUser, toUser);
+        Assert.isTrue(newFriends.isEmpty(), "friends already exists: fromUsername=" + fromUsername + ", toUsername=" + toUsername);
         friendsRepository.save(new Friends(fromUser, toUser));
         log.info("User '{}' sent friend request to '{}'", fromUsername, toUsername);
+        Optional<Friends> oldFriends = friendsRepository.findByFromUserAndToUser(toUser, fromUser);
+        if (oldFriends.isPresent()) {
+            debtsClient.addFriends(new FriendsDTO(toUser.getId(), fromUser.getId()));
+            log.info("New friends record was sent to debts-service: userId1='{}', userId2='{}'", toUser.getId(), fromUser.getId());
+        }
     }
 
     public void removeRequest(String fromUsername, String toUsername) {

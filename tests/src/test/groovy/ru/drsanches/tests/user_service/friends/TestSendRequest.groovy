@@ -117,6 +117,23 @@ class TestSendRequest extends Specification {
         assert e.response.status == 400
     }
 
+    def "send request to current user"() {
+        given: "user"
+        def username1 = DataGenerator.createValidUsername()
+        def password1 = DataGenerator.createValidPassword()
+        RequestUtils.createUser(username1, password1)
+        def token1 = RequestUtils.getToken(username1, password1)
+
+        when: "sendRequest is called"
+        RequestUtils.getUserRestClient().post(
+                path: "/friends/$username1",
+                headers: ["Authorization": "Bearer $token1"])
+
+        then: "response is correct"
+        HttpResponseException e = thrown(HttpResponseException)
+        assert e.response.status == 400
+    }
+
     def "send request with invalid token"() {
         given: "two users"
         def username1 = DataGenerator.createValidUsername()

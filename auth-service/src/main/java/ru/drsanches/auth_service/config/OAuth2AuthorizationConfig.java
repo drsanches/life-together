@@ -23,6 +23,9 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Value("${service-secrets.user-service}")
     String userServiceSecret;
 
+    @Value("${service-secrets.debts-service}")
+    String debtsServiceSecret;
+
     @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
@@ -40,7 +43,7 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-       clients.inMemory()
+        clients.inMemory()
                 .withClient("browser")
                 .authorizedGrantTypes("refresh_token", "password")
                 .scopes("ui")
@@ -50,7 +53,10 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("server")
                 .and()
-                .withClient("debts-service");
+                .withClient("debts-service")
+                .secret(debtsServiceSecret)
+                .authorizedGrantTypes("client_credentials", "refresh_token")
+                .scopes("server");
     }
 
     @Override
