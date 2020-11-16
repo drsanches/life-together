@@ -1,3 +1,5 @@
+//TODO: Fix 'gradlew test' task
+
 plugins {
     id 'groovy'
 }
