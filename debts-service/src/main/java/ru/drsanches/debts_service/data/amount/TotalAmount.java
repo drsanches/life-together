@@ -7,8 +7,8 @@ import javax.persistence.IdClass;
 
 //TODO: Add validation
 @Entity
-@IdClass(AmountKey.class)
-public class Amount {
+@IdClass(TotalAmountKey.class)
+public class TotalAmount {
 
     @Id
     private String fromUserId;
@@ -19,9 +19,9 @@ public class Amount {
     @Column
     private int totalAmount;
 
-    public Amount() {}
+    public TotalAmount() {}
 
-    public Amount(String fromUserId, String toUserId, int totalAmount) {
+    public TotalAmount(String fromUserId, String toUserId, int totalAmount) {
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.totalAmount = totalAmount;
@@ -41,5 +41,14 @@ public class Amount {
 
     public void setAmount(int totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Amount{" +
+                "fromUserId='" + fromUserId + '\'' +
+                ", toUserId='" + toUserId + '\'' +
+                ", totalAmount=" + totalAmount +
+                '}';
     }
 }

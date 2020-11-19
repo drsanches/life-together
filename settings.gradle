@@ -6,3 +6,5 @@ include 'registry-service'
 include 'user-service'
 include 'debts-service'
 include 'tests'
+
+//TODO: Decide what to do with Serializable

@@ -8,6 +8,7 @@ import ru.drsanches.tests.DataGenerator
 import ru.drsanches.tests.RequestUtils
 import spock.lang.Specification
 
+//TODO: check transactions
 class TestSendMoney extends Specification {
 
     def "success money send to one user"() {

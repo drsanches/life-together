@@ -2,15 +2,15 @@ package ru.drsanches.debts_service.data.amount;
 
 import java.io.Serializable;
 
-public class AmountKey implements Serializable {
+public class TotalAmountKey implements Serializable {
     
     private String fromUserId;
 
     private String toUserId;
 
-    public AmountKey() {}
+    public TotalAmountKey() {}
 
-    public AmountKey(String fromUserId, String toUserId) {
+    public TotalAmountKey(String fromUserId, String toUserId) {
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
     }
