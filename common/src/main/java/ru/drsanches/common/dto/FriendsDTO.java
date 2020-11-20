@@ -1,8 +1,6 @@
 package ru.drsanches.common.dto;
 
-import java.io.Serializable;
-
-public class FriendsDTO implements Serializable {
+public class FriendsDTO {
 
     private String userId1;
 
