@@ -156,8 +156,9 @@ class RequestUtils {
         }
     }
 
-    static void sendMoney(String username, String password, List<String> toUserIdList, int money, String message) {
+    static Date[] sendMoney(String username, String password, List<String> toUserIdList, int money, String message) {
         String token = getToken(username, password)
+        Date dateBefore = new Date()
         getDebtsRestClient().post(
                 path: "/debts/send/",
                 headers: ["Authorization": "Bearer $token"],
@@ -165,6 +166,8 @@ class RequestUtils {
                        money: money,
                        message: message],
                 requestContentType: ContentType.JSON)
+        Date dateAfter = new Date()
+        return [dateBefore, dateAfter]
     }
 
     static JSONArray getHistory(String username, String password) {

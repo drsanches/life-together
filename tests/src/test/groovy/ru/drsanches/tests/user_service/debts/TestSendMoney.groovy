@@ -26,6 +26,7 @@ class TestSendMoney extends Specification {
         def message = DataGenerator.createValidMessage()
 
         when: "send is called"
+        def dateBefore = new Date()
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().post(
                 path: "/debts/send",
                 headers: ["Authorization": "Bearer $token1"],
@@ -33,6 +34,7 @@ class TestSendMoney extends Specification {
                         money: money,
                         message: message],
                 requestContentType : ContentType.JSON)
+        def dateAfter = new Date()
 
         then: "response is correct"
         assert response.status == 201
@@ -50,9 +52,12 @@ class TestSendMoney extends Specification {
         def history2 = RequestUtils.getHistory(username2, password2)
         assert history1.size() == 1
         assert history2.size() == 1
-        assert Utils.historyContainsTransaction(history1, userId1, userId2, money, message)
-        assert Utils.historyContainsTransaction(history2, userId1, userId2, money, message)
-        //TODO: Check timestamp
+        def transaction1 = Utils.findTransaction(history1, userId1, userId2, money, message)
+        def transaction2 = Utils.findTransaction(history2, userId1, userId2, money, message)
+        assert transaction1 != null
+        assert transaction2 != null
+        assert Utils.checkTimestamp(dateBefore, transaction1["timestamp"], dateAfter)
+        assert Utils.checkTimestamp(dateBefore, transaction2["timestamp"], dateAfter)
     }
 
     def "success money send to both users"() {
@@ -70,6 +75,7 @@ class TestSendMoney extends Specification {
         def message = DataGenerator.createValidMessage()
 
         when: "send is called"
+        def dateBefore = new Date()
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().post(
                 path: "/debts/send",
                 headers: ["Authorization": "Bearer $token1"],
@@ -77,6 +83,7 @@ class TestSendMoney extends Specification {
                         money: money,
                         message: message],
                 requestContentType : ContentType.JSON)
+        def dateAfter = new Date()
 
         then: "response is correct"
         assert response.status == 201
@@ -94,9 +101,12 @@ class TestSendMoney extends Specification {
         def history2 = RequestUtils.getHistory(username2, password2)
         assert history1.size() == 1
         assert history2.size() == 1
-        assert Utils.historyContainsTransaction(history1, userId1, userId2, money / 2 as int, message)
-        assert Utils.historyContainsTransaction(history2, userId1, userId2, money / 2 as int, message)
-        //TODO: Check timestamp
+        def transaction1 = Utils.findTransaction(history1, userId1, userId2, money / 2 as int, message)
+        def transaction2 = Utils.findTransaction(history2, userId1, userId2, money / 2 as int, message)
+        assert transaction1 != null
+        assert transaction2 != null
+        assert Utils.checkTimestamp(dateBefore, transaction1["timestamp"], dateAfter)
+        assert Utils.checkTimestamp(dateBefore, transaction2["timestamp"], dateAfter)
     }
 
     def "invalid money send"() {

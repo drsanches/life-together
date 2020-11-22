@@ -31,9 +31,9 @@ class TestGetHistory extends Specification {
         def message1 = DataGenerator.createValidMessage()
         def message2 = DataGenerator.createValidMessage()
         def message3 = DataGenerator.createValidMessage()
-        RequestUtils.sendMoney(username1, password1, [userId1, userId2, userId3] as List<String>, money * 3, message1)
-        RequestUtils.sendMoney(username2, password2, [userId1, userId2] as List<String>, money * 2, message2)
-        RequestUtils.sendMoney(username3, password3, [userId1] as List<String>, money * 2, message3)
+        def period1 = RequestUtils.sendMoney(username1, password1, [userId1, userId2, userId3] as List<String>, money * 3, message1)
+        def period2 = RequestUtils.sendMoney(username2, password2, [userId1, userId2] as List<String>, money * 2, message2)
+        def period3 = RequestUtils.sendMoney(username3, password3, [userId1] as List<String>, money * 2, message3)
 
         when: "getHistory is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
@@ -44,11 +44,18 @@ class TestGetHistory extends Specification {
         then: "response is correct"
         assert response.status == 200
         assert response.getData().size() == 4
-        assert Utils.historyContainsTransaction(response.getData(), userId1, userId2, money, message1)
-        assert Utils.historyContainsTransaction(response.getData(), userId1, userId3, money, message1)
-        assert Utils.historyContainsTransaction(response.getData(), userId2, userId1, money, message2)
-        assert Utils.historyContainsTransaction(response.getData(), userId3, userId1, money * 2, message3)
-        //TODO: Check timestamp
+        def transaction1 = Utils.findTransaction(response.getData(), userId1, userId2, money, message1)
+        def transaction2 = Utils.findTransaction(response.getData(), userId1, userId3, money, message1)
+        def transaction3 = Utils.findTransaction(response.getData(), userId2, userId1, money, message2)
+        def transaction4 = Utils.findTransaction(response.getData(), userId3, userId1, money * 2, message3)
+        assert transaction1 != null
+        assert transaction2 != null
+        assert transaction3 != null
+        assert transaction4 != null
+        assert Utils.checkTimestamp(period1[0], transaction1["timestamp"], period1[1])
+        assert Utils.checkTimestamp(period1[0], transaction2["timestamp"], period1[1])
+        assert Utils.checkTimestamp(period2[0], transaction3["timestamp"], period2[1])
+        assert Utils.checkTimestamp(period3[0], transaction4["timestamp"], period3[1])
     }
 
     def "without friends history getting"() {
@@ -105,7 +112,7 @@ class TestGetHistory extends Specification {
         def token1 = RequestUtils.getToken(username1, password1)
         def money = DataGenerator.createValidMoney()
         def message = DataGenerator.createValidMessage()
-        RequestUtils.sendMoney(username1, password1, [userId2] as List<String>, money, message)
+        def period = RequestUtils.sendMoney(username1, password1, [userId2] as List<String>, money, message)
         RequestUtils.deleteFriend(username2, password2, username1)
 
         when: "getHistory is called"
@@ -117,8 +124,9 @@ class TestGetHistory extends Specification {
         then: "response is correct"
         assert response.status == 200
         assert response.getData().size() == 1
-        assert Utils.historyContainsTransaction(response.getData(), userId1, userId2, money, message)
-        //TODO: Check timestamp
+        def transaction = Utils.findTransaction(response.getData(), userId1, userId2, money, message)
+        assert transaction != null
+        assert Utils.checkTimestamp(period[0], transaction["timestamp"], period[1])
     }
 
     def "get history with disabled friend"() {
@@ -134,7 +142,7 @@ class TestGetHistory extends Specification {
         def token1 = RequestUtils.getToken(username1, password1)
         def money = DataGenerator.createValidMoney()
         def message = DataGenerator.createValidMessage()
-        RequestUtils.sendMoney(username1, password1, [userId2] as List<String>, money, message)
+        def period = RequestUtils.sendMoney(username1, password1, [userId2] as List<String>, money, message)
         RequestUtils.disableUser(username2, password2)
 
         when: "getHistory is called"
@@ -146,8 +154,9 @@ class TestGetHistory extends Specification {
         then: "response is correct"
         assert response.status == 200
         assert response.getData().size() == 1
-        assert Utils.historyContainsTransaction(response.getData(), userId1, userId2, money, message)
-        //TODO: Check timestamp
+        def transaction = Utils.findTransaction(response.getData(), userId1, userId2, money, message)
+        assert transaction != null
+        assert Utils.checkTimestamp(period[0], transaction["timestamp"], period[1])
     }
 
     def "invalid token history getting"() {
