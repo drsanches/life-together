@@ -4,18 +4,16 @@ import ru.drsanches.debts_service.service.TransactionListener;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @EntityListeners(TransactionListener.class)
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private long id;
+    private String id;
 
     @Column
     private String fromUserId;
@@ -29,17 +27,19 @@ public class Transaction {
     @Column
     private String message;
 
-    //TODO: Fix
-    @Column(columnDefinition = "TIMESTAMP")
+    @Column
     private Date timestamp;
 
     public Transaction() {}
 
     public Transaction(String fromUserId, String toUserId, int amount, String message) {
+        this.id = UUID.randomUUID().toString();
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.amount = amount;
         this.message = message;
+        //TODO: Fix
+        this.timestamp = new Date();
     }
 
     public String getFromUserId() {

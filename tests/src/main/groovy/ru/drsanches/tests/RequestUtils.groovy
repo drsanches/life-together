@@ -156,14 +156,32 @@ class RequestUtils {
         }
     }
 
-    static void sendMoney(String username, String password, List<String> toUserIdList, int money) {
+    static void sendMoney(String username, String password, List<String> toUserIdList, int money, String message) {
         String token = getToken(username, password)
         getDebtsRestClient().post(
                 path: "/debts/send/",
                 headers: ["Authorization": "Bearer $token"],
                 body: [toUserIdList: toUserIdList,
-                       money: money],
+                       money: money,
+                       message: message],
                 requestContentType: ContentType.JSON)
+    }
+
+    static JSONArray getHistory(String username, String password) {
+        String token = getToken(username, password)
+        if (token == null) {
+            return null
+        }
+        try {
+            HttpResponseDecorator response = getDebtsRestClient().get(
+                    path: "/debts/history",
+                    headers: ["Authorization": "Bearer $token"],
+                    requestContentType : ContentType.JSON)
+            return response.status == 200 ? response.getData() : null
+        } catch(Exception e) {
+            e.printStackTrace()
+            return null
+        }
     }
 
     static void deleteFriend(String username, String password, String friendUsername) {

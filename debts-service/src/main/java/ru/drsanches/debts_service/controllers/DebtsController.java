@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.drsanches.common.dto.FriendsDTO;
 import ru.drsanches.debts_service.data.dto.DebtsDTO;
 import ru.drsanches.debts_service.data.dto.SendMoneyDTO;
+import ru.drsanches.debts_service.data.transaction.Transaction;
 import ru.drsanches.debts_service.service.MoneyService;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/debts")
@@ -35,7 +37,7 @@ public class DebtsController {
     }
 
     @RequestMapping(path = "/send", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED) //TODO: 200 or 201?
+    @ResponseStatus(HttpStatus.CREATED)
     public void sendMoney(OAuth2Authentication authentication, @RequestBody SendMoneyDTO sendMoneyDTO) {
         moneyService.sendMoney(getUserId(authentication), sendMoneyDTO);
     }
@@ -43,6 +45,11 @@ public class DebtsController {
     @RequestMapping(path = "", method = RequestMethod.GET)
     public DebtsDTO getDebts(OAuth2Authentication authentication) {
         return moneyService.getDebts(getUserId(authentication));
+    }
+
+    @RequestMapping(path = "/history", method = RequestMethod.GET)
+    public Set<Transaction> getHistory(OAuth2Authentication authentication) {
+        return moneyService.getHistory(getUserId(authentication));
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)

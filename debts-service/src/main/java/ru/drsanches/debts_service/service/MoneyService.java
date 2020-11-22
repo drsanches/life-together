@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 
 //TODO: delete the record if the user is no longer a friend and there is no debt
+//TODO: make transaction
 @Service
 public class MoneyService {
 
@@ -76,6 +77,12 @@ public class MoneyService {
             }
         }
         return debtsDTO;
+    }
+
+    public Set<Transaction> getHistory(String userId) {
+        Set<Transaction> transactions = transactionRepository.findByFromUserId(userId);
+        transactions.addAll(transactionRepository.findByToUserId(userId));
+        return transactions;
     }
 
     private void sendMoney(String fromUserId, String toUserId, int money, String message) {

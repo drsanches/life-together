@@ -6,9 +6,9 @@ import groovyx.net.http.HttpResponseException
 import net.sf.json.JSONArray
 import ru.drsanches.tests.DataGenerator
 import ru.drsanches.tests.RequestUtils
+import ru.drsanches.tests.Utils
 import spock.lang.Specification
 
-//TODO: check transactions
 class TestSendMoney extends Specification {
 
     def "success money send to one user"() {
@@ -23,13 +23,15 @@ class TestSendMoney extends Specification {
         RequestUtils.sendFriendRequest(username2, password2, username1)
         def token1 = RequestUtils.getToken(username1, password1)
         def money = DataGenerator.createValidMoney()
+        def message = DataGenerator.createValidMessage()
 
         when: "send is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().post(
                 path: "/debts/send",
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [userId2],
-                        money: money],
+                        money: money,
+                        message: message],
                 requestContentType : ContentType.JSON)
 
         then: "response is correct"
@@ -42,6 +44,15 @@ class TestSendMoney extends Specification {
         assert debts1["toUserDebts"] == JSONArray.fromObject(['userId': userId2, 'debt': money])
         assert debts2["toUserDebts"] == new JSONArray()
         assert debts2["userDebts"] == JSONArray.fromObject(['userId': userId1, 'debt': money])
+
+        and: "history is correct"
+        def history1 = RequestUtils.getHistory(username1, password1)
+        def history2 = RequestUtils.getHistory(username2, password2)
+        assert history1.size() == 1
+        assert history2.size() == 1
+        assert Utils.historyContainsTransaction(history1, userId1, userId2, money, message)
+        assert Utils.historyContainsTransaction(history2, userId1, userId2, money, message)
+        //TODO: Check timestamp
     }
 
     def "success money send to both users"() {
@@ -56,13 +67,15 @@ class TestSendMoney extends Specification {
         RequestUtils.sendFriendRequest(username2, password2, username1)
         def token1 = RequestUtils.getToken(username1, password1)
         def money = DataGenerator.createValidMoney()
+        def message = DataGenerator.createValidMessage()
 
         when: "send is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().post(
                 path: "/debts/send",
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [userId1, userId2],
-                        money: money],
+                        money: money,
+                        message: message],
                 requestContentType : ContentType.JSON)
 
         then: "response is correct"
@@ -72,9 +85,18 @@ class TestSendMoney extends Specification {
         def debts1 = RequestUtils.getDebts(username1, password1)
         def debts2 = RequestUtils.getDebts(username2, password2)
         assert debts1["userDebts"] == new JSONArray()
-        assert debts1["toUserDebts"] == JSONArray.fromObject(['userId': userId2, 'debt': money / 2])
+        assert debts1["toUserDebts"] == JSONArray.fromObject(['userId': userId2, 'debt': (int) money / 2])
         assert debts2["toUserDebts"] == new JSONArray()
-        assert debts2["userDebts"] == JSONArray.fromObject(['userId': userId1, 'debt': money / 2])
+        assert debts2["userDebts"] == JSONArray.fromObject(['userId': userId1, 'debt': (int) money / 2])
+
+        and: "history is correct"
+        def history1 = RequestUtils.getHistory(username1, password1)
+        def history2 = RequestUtils.getHistory(username2, password2)
+        assert history1.size() == 1
+        assert history2.size() == 1
+        assert Utils.historyContainsTransaction(history1, userId1, userId2, money / 2 as int, message)
+        assert Utils.historyContainsTransaction(history2, userId1, userId2, money / 2 as int, message)
+        //TODO: Check timestamp
     }
 
     def "invalid money send"() {
@@ -108,6 +130,12 @@ class TestSendMoney extends Specification {
         assert debts1["toUserDebts"] == new JSONArray()
         assert debts2["toUserDebts"] == new JSONArray()
         assert debts2["userDebts"] == new JSONArray()
+
+        and: "history is empty"
+        def history1 = RequestUtils.getHistory(username1, password1)
+        def history2 = RequestUtils.getHistory(username2, password2)
+        assert history1.size() == 0
+        assert history2.size() == 0
 
         where:
         money << [0, -1]
@@ -143,6 +171,12 @@ class TestSendMoney extends Specification {
         assert debts1["toUserDebts"] == new JSONArray()
         assert debts2["toUserDebts"] == new JSONArray()
         assert debts2["userDebts"] == new JSONArray()
+
+        and: "history is empty"
+        def history1 = RequestUtils.getHistory(username1, password1)
+        def history2 = RequestUtils.getHistory(username2, password2)
+        assert history1.size() == 0
+        assert history2.size() == 0
     }
 
     def "with outgoing friend request money send"() {
@@ -176,6 +210,12 @@ class TestSendMoney extends Specification {
         assert debts1["toUserDebts"] == new JSONArray()
         assert debts2["toUserDebts"] == new JSONArray()
         assert debts2["userDebts"] == new JSONArray()
+
+        and: "history is empty"
+        def history1 = RequestUtils.getHistory(username1, password1)
+        def history2 = RequestUtils.getHistory(username2, password2)
+        assert history1.size() == 0
+        assert history2.size() == 0
     }
 
     def "with incoming friend request money send"() {
@@ -209,12 +249,18 @@ class TestSendMoney extends Specification {
         assert debts1["toUserDebts"] == new JSONArray()
         assert debts2["toUserDebts"] == new JSONArray()
         assert debts2["userDebts"] == new JSONArray()
+
+        and: "history is empty"
+        def history1 = RequestUtils.getHistory(username1, password1)
+        def history2 = RequestUtils.getHistory(username2, password2)
+        assert history1.size() == 0
+        assert history2.size() == 0
     }
 
-    //TODO:
+    //TODO: Implement test
     def "send money back to a user who is no longer a friend"() {}
 
-    //TODO:
+    //TODO: Implement test
     def "disable user"() {}
 
     def "invalid user id money send"() {
@@ -242,6 +288,10 @@ class TestSendMoney extends Specification {
         def debts1 = RequestUtils.getDebts(username1, password1)
         assert debts1["userDebts"] == new JSONArray()
         assert debts1["toUserDebts"] == new JSONArray()
+
+        and: "history is empty"
+        def history1 = RequestUtils.getHistory(username1, password1)
+        assert history1.size() == 0
     }
 
     def "invalid token money send"() {
@@ -268,5 +318,9 @@ class TestSendMoney extends Specification {
         def debts1 = RequestUtils.getDebts(username1, password1)
         assert debts1["userDebts"] == new JSONArray()
         assert debts1["toUserDebts"] == new JSONArray()
+
+        and: "history is empty"
+        def history1 = RequestUtils.getHistory(username1, password1)
+        assert history1.size() == 0
     }
 }

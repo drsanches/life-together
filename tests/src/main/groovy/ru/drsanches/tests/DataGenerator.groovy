@@ -21,4 +21,8 @@ class DataGenerator {
     static Integer createValidMoney() {
         return Math.abs(new Random().nextInt())
     }
+
+    static String createValidMessage() {
+        return UUID.randomUUID().toString()
+    }
 }
