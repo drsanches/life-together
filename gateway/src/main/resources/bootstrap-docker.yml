@@ -7,3 +7,9 @@ spring:
       fail-fast: true
       username: user
       password: CONFIG_SERVICE_PASSWORD
+
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: ERROR
+    ru.drsanches.gateway: INFO
