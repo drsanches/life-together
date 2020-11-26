@@ -55,6 +55,7 @@ public class UserController {
         userService.changeUsername(changeUsernameDTO.getOldUsername(), changeUsernameDTO.getNewUsername());
     }
 
+    //TODO: Rename
     @RequestMapping(value = "/log_out", method = RequestMethod.GET)
     public void logout(Principal principal) {
         removeTokens(principal.getName());

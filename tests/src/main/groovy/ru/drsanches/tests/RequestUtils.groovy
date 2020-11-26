@@ -9,28 +9,31 @@ import net.sf.json.JSONObject
 class RequestUtils {
 
     static String SERVER_URL = "http://localhost"
+    static String GATEWAY_PORT = "4000"
+
+    // Use for test without gateway
     static String AUTH_PORT = "8084"
     static String USER_PORT = "8085"
     static String DEBTS_PORT = "8086"
 
     static RESTClient getAuthRestClient() {
-        return new RESTClient( "$SERVER_URL:$AUTH_PORT")
+        return new RESTClient( "$SERVER_URL:$GATEWAY_PORT")
     }
 
     static RESTClient getUserRestClient() {
-        return new RESTClient( "$SERVER_URL:$USER_PORT")
+        return new RESTClient( "$SERVER_URL:$GATEWAY_PORT")
     }
 
     static RESTClient getDebtsRestClient() {
-        return new RESTClient( "$SERVER_URL:$DEBTS_PORT")
+        return new RESTClient( "$SERVER_URL:$GATEWAY_PORT")
     }
 
     static JSONObject createUser(String username, String password) {
         HttpResponseDecorator response = getUserRestClient().post(
                 path: '/user/registration',
-                body:  [username: username,
-                        password: password],
-                requestContentType : ContentType.JSON)
+                body: [username: username,
+                       password: password],
+                 requestContentType: ContentType.JSON)
         return response.getData()
     }
 
@@ -207,7 +210,7 @@ class RequestUtils {
         try {
             String client = "browser:".bytes.encodeBase64().toString()
             HttpResponseDecorator response = getAuthRestClient().post(
-                    path: "oauth/token",
+                    path: "auth/oauth/token", //Use 'path: /oauth/token' for test without gateway
                     headers: [
                             //TODO: Fix in code
                             "Authorization": "Basic $client"

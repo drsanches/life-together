@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: gateway-docker
+  cloud:
+    config:
+      uri: "http://config-service:8081"
+      fail-fast: true
+      username: user
+      password: CONFIG_SERVICE_PASSWORD
