@@ -8,7 +8,6 @@ import org.springframework.util.Assert;
 import ru.drsanches.common.dto.FriendsDTO;
 import ru.drsanches.user_service.client.DebtsClient;
 import ru.drsanches.user_service.data.friends.Friends;
-import ru.drsanches.user_service.data.friends.FriendsKey;
 import ru.drsanches.user_service.data.friends.FriendsRepository;
 import ru.drsanches.user_service.data.user.User;
 import ru.drsanches.user_service.data.dto.UserDTO;
@@ -17,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+//TODO: Fix logs
 @Service
 public class FriendsService {
 

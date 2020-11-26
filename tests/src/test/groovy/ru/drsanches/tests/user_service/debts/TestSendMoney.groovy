@@ -11,6 +11,8 @@ import spock.lang.Specification
 
 class TestSendMoney extends Specification {
 
+    String PATH = "/debts/send"
+
     def "success money send to one user"() {
         given: "two friends"
         def username1 = DataGenerator.createValidUsername()
@@ -28,7 +30,7 @@ class TestSendMoney extends Specification {
         when: "send is called"
         def dateBefore = new Date()
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().post(
-                path: "/debts/send",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [userId2],
                         money: money,
@@ -77,7 +79,7 @@ class TestSendMoney extends Specification {
         when: "send is called"
         def dateBefore = new Date()
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().post(
-                path: "/debts/send",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [userId1, userId2],
                         money: money,
@@ -123,7 +125,7 @@ class TestSendMoney extends Specification {
 
         when: "send is called"
         RequestUtils.getDebtsRestClient().post(
-                path: "/debts/send",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [userId2],
                         money: money],
@@ -164,7 +166,7 @@ class TestSendMoney extends Specification {
 
         when: "send is called"
         RequestUtils.getDebtsRestClient().post(
-                path: "/debts/send",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [userId2],
                         money: money],
@@ -203,7 +205,7 @@ class TestSendMoney extends Specification {
 
         when: "send is called"
         RequestUtils.getDebtsRestClient().post(
-                path: "/debts/send",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [userId2],
                         money: money],
@@ -242,7 +244,7 @@ class TestSendMoney extends Specification {
 
         when: "send is called"
         RequestUtils.getDebtsRestClient().post(
-                path: "/debts/send",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [userId2],
                         money: money],
@@ -284,7 +286,7 @@ class TestSendMoney extends Specification {
 
         when: "send is called"
         RequestUtils.getDebtsRestClient().post(
-                path: "/debts/send",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 body:  [toUserIdList: [toUserId],
                         money: money],
@@ -314,7 +316,7 @@ class TestSendMoney extends Specification {
 
         when: "send is called"
         RequestUtils.getDebtsRestClient().post(
-                path: "/debts/send",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"],
                 body:  [toUserIdList: [toUserId],
                         money: money],

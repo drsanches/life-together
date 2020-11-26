@@ -8,6 +8,8 @@ import spock.lang.Specification
 
 class TestGetUser extends Specification {
 
+    String PATH = "/user/"
+
     def "success get user"() {
         given: "registered user with token and another registered user"
         def username1 = DataGenerator.createValidUsername()
@@ -23,7 +25,7 @@ class TestGetUser extends Specification {
 
         when: "getUser is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().get(
-                path: "/user/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -43,7 +45,7 @@ class TestGetUser extends Specification {
 
         when: "getUser is called with invalid token"
         RequestUtils.getUserRestClient().get(
-                path: "/user/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"

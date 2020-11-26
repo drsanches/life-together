@@ -9,6 +9,8 @@ import spock.lang.Specification
 
 class TestSendRequest extends Specification {
 
+    String PATH = "/friends/"
+
     def "success one side request sending"() {
         given: "two users"
         def username1 = DataGenerator.createValidUsername()
@@ -21,7 +23,7 @@ class TestSendRequest extends Specification {
 
         when: "sendRequest is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().post(
-                path: "/friends/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -51,7 +53,7 @@ class TestSendRequest extends Specification {
 
         when: "sendRequest is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().post(
-                path: "/friends/$username1",
+                path: PATH + username1,
                 headers: ["Authorization": "Bearer $token2"])
 
         then: "response is correct"
@@ -81,7 +83,7 @@ class TestSendRequest extends Specification {
 
         when: "sendRequest is called"
         RequestUtils.getUserRestClient().post(
-                path: "/friends/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -109,7 +111,7 @@ class TestSendRequest extends Specification {
 
         when: "sendRequest is called"
         RequestUtils.getUserRestClient().post(
-                path: "/friends/$nonexistentUsername",
+                path: PATH + nonexistentUsername,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -126,7 +128,7 @@ class TestSendRequest extends Specification {
 
         when: "sendRequest is called"
         RequestUtils.getUserRestClient().post(
-                path: "/friends/$username1",
+                path: PATH + username1,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -146,7 +148,7 @@ class TestSendRequest extends Specification {
 
         when: "sendRequest is called with invalid token"
         RequestUtils.getUserRestClient().post(
-                path: "/friends/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"

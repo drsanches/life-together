@@ -8,7 +8,9 @@ import ru.drsanches.tests.RequestUtils
 import spock.lang.Specification
 
 class TestGetFriends extends Specification {
-    
+
+    String PATH = "/friends"
+
     def "success friends getting"() {
         given: "two friends"
         def username1 = DataGenerator.createValidUsername()
@@ -23,7 +25,7 @@ class TestGetFriends extends Specification {
 
         when: "getFriends is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().get(
-                path: '/friends',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -45,7 +47,7 @@ class TestGetFriends extends Specification {
 
         when: "getFriends is called with invalid token"
         RequestUtils.getUserRestClient().get(
-                path: '/friends',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"

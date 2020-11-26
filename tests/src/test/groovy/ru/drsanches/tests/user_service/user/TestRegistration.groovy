@@ -10,6 +10,8 @@ import spock.lang.Specification
 
 class TestRegistration extends Specification {
 
+    String PATH = "/user/registration"
+
     def "success user registration"() {
         given: "unique username and password"
         def username = DataGenerator.createValidUsername()
@@ -17,7 +19,7 @@ class TestRegistration extends Specification {
 
         when: "registration is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().post(
-                path: '/user/registration',
+                path: PATH,
                 body:  [username: username,
                         password: password],
                 requestContentType : ContentType.JSON)
@@ -42,7 +44,7 @@ class TestRegistration extends Specification {
 
         when: "registration is called"
         RequestUtils.getUserRestClient().post(
-                path: '/user/registration',
+                path: PATH,
                 body:  [username: username,
                         password: password],
                 requestContentType : ContentType.JSON)

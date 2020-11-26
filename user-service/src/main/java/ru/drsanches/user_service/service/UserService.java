@@ -16,6 +16,7 @@ import ru.drsanches.user_service.data.user.UserRepository;
 import java.util.Optional;
 import java.util.UUID;
 
+//TODO: Fix logs
 @Service
 public class UserService {
 

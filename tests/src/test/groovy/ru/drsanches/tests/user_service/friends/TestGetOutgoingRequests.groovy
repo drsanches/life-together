@@ -9,6 +9,8 @@ import spock.lang.Specification
 
 class TestGetOutgoingRequests extends Specification {
 
+    String PATH = "/friends/requests/outgoing"
+
     def "success outgoing requests getting"() {
         given: "two users"
         def username1 = DataGenerator.createValidUsername()
@@ -22,7 +24,7 @@ class TestGetOutgoingRequests extends Specification {
 
         when: "getOutgoingRequests is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().get(
-                path: '/friends/requests/outgoing',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -36,7 +38,7 @@ class TestGetOutgoingRequests extends Specification {
 
         when: "getOutgoingRequests is called with invalid token"
         RequestUtils.getUserRestClient().get(
-                path: '/friends/requests/outgoing',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"])
 
         then: "response is correct"

@@ -8,6 +8,8 @@ import spock.lang.Specification
 
 class TestDisableCurrentUser extends Specification {
 
+    String PATH = "/user/current"
+
     def "success current user disabling"() {
         given: "registered user and token"
         def username = DataGenerator.createValidUsername()
@@ -17,7 +19,7 @@ class TestDisableCurrentUser extends Specification {
 
         when: "disableCurrentUser is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().delete(
-                path: '/user/current',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"])
 
         then: "response is correct"
@@ -41,7 +43,7 @@ class TestDisableCurrentUser extends Specification {
 
         when: "disableCurrentUser is called with invalid token"
         RequestUtils.getUserRestClient().delete(
-                path: '/user/current',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"])
 
         then: "response is correct"

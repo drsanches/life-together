@@ -1,3 +1,5 @@
+#TODO: Secure actuator
+
 server:
   port: 4000
 

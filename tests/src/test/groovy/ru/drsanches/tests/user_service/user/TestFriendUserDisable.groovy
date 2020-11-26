@@ -8,6 +8,8 @@ import spock.lang.Specification
 
 class TestFriendUserDisable extends Specification {
 
+    String PATH = "/user/current"
+
     def "success friend user disabling"() {
         given: "4 users"
         def disablingUsername = DataGenerator.createValidUsername()
@@ -30,7 +32,7 @@ class TestFriendUserDisable extends Specification {
 
         when: "disableCurrentUser is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().delete(
-                path: '/user/current',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"])
 
         then: "response is correct"

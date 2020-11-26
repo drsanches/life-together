@@ -10,6 +10,8 @@ import spock.lang.Specification
 
 class TestGetDebts extends Specification {
 
+    String PATH = "/debts"
+
     def "success debts getting"() {
         given: "three friends"
         def username1 = DataGenerator.createValidUsername()
@@ -33,7 +35,7 @@ class TestGetDebts extends Specification {
 
         when: "getDebts is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 requestContentType : ContentType.JSON)
 
@@ -54,7 +56,7 @@ class TestGetDebts extends Specification {
 
         when: "getDebts is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"],
                 requestContentType : ContentType.JSON)
 
@@ -80,7 +82,7 @@ class TestGetDebts extends Specification {
 
         when: "getDebts is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 requestContentType : ContentType.JSON)
 
@@ -109,7 +111,7 @@ class TestGetDebts extends Specification {
 
         when: "getDebts is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 requestContentType : ContentType.JSON)
 
@@ -138,7 +140,7 @@ class TestGetDebts extends Specification {
 
         when: "getDebts is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 requestContentType : ContentType.JSON)
 
@@ -159,7 +161,7 @@ class TestGetDebts extends Specification {
 
         when: "getDebts is called"
         RequestUtils.getDebtsRestClient().get(
-                path: "/debts",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"],
                 requestContentType : ContentType.JSON)
 

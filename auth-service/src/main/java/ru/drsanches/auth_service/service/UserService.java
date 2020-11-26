@@ -10,6 +10,7 @@ import ru.drsanches.auth_service.data.User;
 import ru.drsanches.auth_service.data.UserRepository;
 import java.util.Optional;
 
+//TODO: Fix logs
 @Service
 public class UserService {
 

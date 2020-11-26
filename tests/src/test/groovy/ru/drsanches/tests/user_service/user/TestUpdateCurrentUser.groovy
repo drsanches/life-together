@@ -9,6 +9,8 @@ import spock.lang.Specification
 
 class TestUpdateCurrentUser extends Specification {
 
+    String PATH = "/user/current"
+
     def "success current user update"() {
         given: "registered user, token, new id, username, firstName and lastName"
         def username = DataGenerator.createValidUsername()
@@ -22,7 +24,7 @@ class TestUpdateCurrentUser extends Specification {
 
         when: "updateCurrentUser is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().put(
-                path: '/user/current',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"],
                 body:  [id: newId,
                         username: user["username"],
@@ -55,7 +57,7 @@ class TestUpdateCurrentUser extends Specification {
 
         when: "updateCurrentUser is called with invalid token"
         RequestUtils.getUserRestClient().put(
-                path: '/user/current',
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"],
                 body:  user,
                 requestContentType : ContentType.JSON)

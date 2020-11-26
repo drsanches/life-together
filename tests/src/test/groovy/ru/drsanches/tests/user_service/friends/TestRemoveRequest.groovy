@@ -9,6 +9,8 @@ import spock.lang.Specification
 
 class TestRemoveRequest extends Specification {
 
+    String PATH = "/friends/"
+
     def "success one side request deletion"() {
         given: "two users and one side friend request"
         def username1 = DataGenerator.createValidUsername()
@@ -22,7 +24,7 @@ class TestRemoveRequest extends Specification {
 
         when: "sendRequest is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().delete(
-                path: "/friends/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -53,7 +55,7 @@ class TestRemoveRequest extends Specification {
 
         when: "sendRequest is called"
         HttpResponseDecorator response = RequestUtils.getUserRestClient().delete(
-                path: "/friends/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -82,7 +84,7 @@ class TestRemoveRequest extends Specification {
 
         when: "sendRequest is called"
         RequestUtils.getUserRestClient().delete(
-                path: "/friends/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -110,7 +112,7 @@ class TestRemoveRequest extends Specification {
 
         when: "sendRequest is called"
         RequestUtils.getUserRestClient().delete(
-                path: "/friends/$nonexistentUsername",
+                path: PATH + nonexistentUsername,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -127,7 +129,7 @@ class TestRemoveRequest extends Specification {
 
         when: "sendRequest is called with invalid token"
         RequestUtils.getUserRestClient().delete(
-                path: "/friends/$username1",
+                path: PATH + username1,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"
@@ -148,7 +150,7 @@ class TestRemoveRequest extends Specification {
 
         when: "sendRequest is called with invalid token"
         RequestUtils.getUserRestClient().delete(
-                path: "/friends/$username2",
+                path: PATH + username2,
                 headers: ["Authorization": "Bearer $token1"])
 
         then: "response is correct"

@@ -11,6 +11,8 @@ import spock.lang.Specification
 
 class TestGetHistory extends Specification {
 
+    String PATH = "/debts/history"
+
     def "success history getting"() {
         given: "three friends"
         def username1 = DataGenerator.createValidUsername()
@@ -37,7 +39,7 @@ class TestGetHistory extends Specification {
 
         when: "getHistory is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts/history",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 requestContentType : ContentType.JSON)
 
@@ -67,7 +69,7 @@ class TestGetHistory extends Specification {
 
         when: "getHistory is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts/history",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"],
                 requestContentType : ContentType.JSON)
 
@@ -90,7 +92,7 @@ class TestGetHistory extends Specification {
 
         when: "getHistory is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts/history",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 requestContentType : ContentType.JSON)
 
@@ -117,7 +119,7 @@ class TestGetHistory extends Specification {
 
         when: "getHistory is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts/history",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 requestContentType : ContentType.JSON)
 
@@ -147,7 +149,7 @@ class TestGetHistory extends Specification {
 
         when: "getHistory is called"
         HttpResponseDecorator response = RequestUtils.getDebtsRestClient().get(
-                path: "/debts/history",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token1"],
                 requestContentType : ContentType.JSON)
 
@@ -168,7 +170,7 @@ class TestGetHistory extends Specification {
 
         when: "getHistory is called"
         RequestUtils.getDebtsRestClient().get(
-                path: "/debts/history",
+                path: PATH,
                 headers: ["Authorization": "Bearer $token"],
                 requestContentType : ContentType.JSON)
 
