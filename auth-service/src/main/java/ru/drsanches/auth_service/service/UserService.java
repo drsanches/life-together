@@ -10,7 +10,6 @@ import ru.drsanches.auth_service.data.User;
 import ru.drsanches.auth_service.data.UserRepository;
 import java.util.Optional;
 
-//TODO: Fix logs
 @Service
 public class UserService {
 
@@ -27,7 +26,7 @@ public class UserService {
         user.setPassword(hash);
         user.setEnable(true);
         userRepository.save(user);
-        log.info("new user has been created: id={}, username={}", user.getId(), user.getUsername());
+        log.info("New user has been created: {}", user.toString());
     }
 
     public void disable(String userId, String newUsername) {
@@ -36,7 +35,7 @@ public class UserService {
         user.setUsername(newUsername);
         user.setEnable(false);
         userRepository.save(user);
-        log.info("user has been disabled: id={}, oldUsername={}, newUsername={}", user.getId(), oldUsername, newUsername);
+        log.info("User has been disabled: {}. Old username: {}", user.toString(), oldUsername);
     }
 
     public void changeUsername(String oldUsername, String newUsername) {
@@ -44,25 +43,25 @@ public class UserService {
         checkNonexistentUser(newUsername);
         current.setUsername(newUsername);
         userRepository.save(current);
-        log.info("username has been changed: id={}, username={}", current.getId(), current.getUsername());
+        log.info("Username has been changed: {}. Old username: {}", current.toString(), oldUsername);
     }
 
     private User getUserByUsernameIfExists(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        Assert.isTrue(user.isPresent(), "can't find user: username=" + username);
-        Assert.isTrue(user.get().isEnabled(), "can't find user: username=" + username);
+        Assert.isTrue(user.isPresent(), "Can't find user with username = " + username);
+        Assert.isTrue(user.get().isEnabled(), "Can't find user with username = " + username);
         return user.get();
     }
 
     private User getUserByIdIfExists(String userId) {
         Optional<User> user = userRepository.findById(userId);
-        Assert.isTrue(user.isPresent(), "can't find user: id=" + userId);
-        Assert.isTrue(user.get().isEnabled(), "can't find user: id=" + userId);
+        Assert.isTrue(user.isPresent(), "Can't find user with id = " + userId);
+        Assert.isTrue(user.get().isEnabled(), "Can't find user with id = " + userId);
         return user.get();
     }
 
     private void checkNonexistentUser(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        Assert.isTrue(user.isEmpty(), "user already exists: " + username);
+        Assert.isTrue(user.isEmpty(), "User with username '" + username + "' already exists");
     }
 }

@@ -76,4 +76,13 @@ public class User implements UserDetails {
     public List<GrantedAuthority> getAuthorities() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", enabled=" + enabled +
+                '}';
+    }
 }

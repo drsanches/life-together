@@ -16,7 +16,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//TODO: Fix logs
 @Service
 public class FriendsService {
 
@@ -42,35 +41,35 @@ public class FriendsService {
     }
 
     public void sendRequest(String fromUsername, String toUsername) {
-        Assert.isTrue(!fromUsername.equals(toUsername), "users are equal: username=" + fromUsername);
+        Assert.isTrue(!fromUsername.equals(toUsername), "You can't send friend request to yourself");
         User fromUser = getUserIfExists(fromUsername);
         User toUser = getUserIfExists(toUsername);
         Optional<Friends> newFriends = friendsRepository.findByFromUserAndToUser(fromUser, toUser);
-        Assert.isTrue(newFriends.isEmpty(), "friends already exists: fromUsername=" + fromUsername + ", toUsername=" + toUsername);
+        Assert.isTrue(newFriends.isEmpty(), "Friend request from '" + fromUsername + "' to '" + toUsername + "' already exists");
         friendsRepository.save(new Friends(fromUser, toUser));
-        log.info("User '{}' sent friend request to '{}'", fromUsername, toUsername);
+        log.info("User '{}' sent friend request to '{}'", fromUser.toString(), toUser.toString());
         Optional<Friends> oldFriends = friendsRepository.findByFromUserAndToUser(toUser, fromUser);
         if (oldFriends.isPresent()) {
             debtsClient.addFriends(new FriendsDTO(toUser.getId(), fromUser.getId()));
-            log.info("New friends record was sent to debts-service: userId1='{}', userId2='{}'", toUser.getId(), fromUser.getId());
+            log.info("New friends record was sent to debts-service: user1 = '{}', user2 = '{}'", toUser.toString(), fromUser.toString());
         }
     }
 
     public void removeRequest(String fromUsername, String toUsername) {
-        Assert.isTrue(!fromUsername.equals(toUsername), "users are equal: username=" + fromUsername);
+        Assert.isTrue(!fromUsername.equals(toUsername), "You can't remove friend request for yourself");
         User fromUser = getUserIfExists(fromUsername);
         User toUser = getUserIfExists(toUsername);
         Optional<Friends> friends = friendsRepository.findByFromUserAndToUser(fromUser, toUser);
-        Assert.isTrue(friends.isPresent(), "friends does not exist: fromUsername=" + fromUsername + ", toUsername=" + toUsername);
+        Assert.isTrue(friends.isPresent(), "Friend request from '" + fromUsername + "' to '" + toUsername + "' does not exist");
         friendsRepository.delete(friends.get());
-        log.info("User '{}' deleted friend request to '{}'", fromUsername, toUsername);
+        log.info("User '{}' deleted friend request to '{}'", fromUser.toString(), toUser.toString());
     }
 
     public void disableUser(String username) {
         User user = getUserIfExists(username);
         friendsRepository.deleteAll(friendsRepository.findByFromUser(user));
         friendsRepository.deleteAll(friendsRepository.findByToUser(user));
-        log.info("user '{}' has been deleted from friends", username);
+        log.info("User '{}' has been deleted from all friends", user.toString());
     }
 
     public Set<UserDTO> getIncomingRequests(String username) {
@@ -89,8 +88,8 @@ public class FriendsService {
 
     private User getUserIfExists(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        Assert.isTrue(user.isPresent(), "can't find user: username=" + username);
-        Assert.isTrue(user.get().isEnabled(), "can't find user: username=" + username);
+        Assert.isTrue(user.isPresent(), "Can't find user with username = " + username);
+        Assert.isTrue(user.get().isEnabled(), "Can't find user with username = " + username);
         return user.get();
     }
 }
