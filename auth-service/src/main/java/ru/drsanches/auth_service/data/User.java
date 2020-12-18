@@ -1,12 +1,14 @@
 package ru.drsanches.auth_service.data;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 
 //TODO: Add validation
 @Entity
@@ -25,6 +27,10 @@ public class User implements UserDetails {
 
     @Column
     private boolean enabled;
+
+    //TODO: Use list
+    @Column
+    private final String role = Role.USER.name();
 
     public String getId() {
         return id;
@@ -73,8 +79,8 @@ public class User implements UserDetails {
     }
 
     @Override
-    public List<GrantedAuthority> getAuthorities() {
-        return null;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(role));
     }
 
     @Override

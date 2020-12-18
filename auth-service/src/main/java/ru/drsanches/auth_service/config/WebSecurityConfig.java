@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import ru.drsanches.auth_service.service.UserDetailsServiceImpl;
 
 @Configuration
@@ -16,8 +17,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private AdminFilter adminFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //TODO: Try to use antMatchers()
+        http.addFilterAfter(adminFilter, BasicAuthenticationFilter.class);
         http
                 .authorizeRequests().anyRequest().authenticated()
                 .and()
