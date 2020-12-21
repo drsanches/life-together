@@ -1,4 +1,4 @@
-package ru.drsanches.auth_service.data;
+package ru.drsanches.common.enumeration;
 
 //TODO: Use special table in DB
 public enum Role {

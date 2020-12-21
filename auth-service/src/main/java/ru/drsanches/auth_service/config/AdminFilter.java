@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
-import ru.drsanches.auth_service.data.Role;
+import ru.drsanches.common.enumeration.Role;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -26,7 +26,7 @@ public class AdminFilter extends GenericFilterBean {
     private final Logger log = LoggerFactory.getLogger(AdminFilter.class);
 
     //TODO: Move regex to config
-    private final Pattern adminUriPattern = Pattern.compile("/admin.*|/actuator.*");
+    private final Pattern adminUriPattern = Pattern.compile("/actuator.*");
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

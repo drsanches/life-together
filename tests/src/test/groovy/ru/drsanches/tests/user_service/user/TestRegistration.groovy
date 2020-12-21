@@ -52,6 +52,6 @@ class TestRegistration extends Specification {
         then: "response is correct"
         HttpResponseException e = thrown(HttpResponseException)
         assert e.response.status == 400
-        assert e.response.getData()["str"] == "user already exists: $username"
+        assert e.response.getData()["str"] == "User with username '$username' already exists"
     }
 }

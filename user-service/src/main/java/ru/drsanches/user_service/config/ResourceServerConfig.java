@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.client.token.grant.client.ClientCrede
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import ru.drsanches.common.enumeration.Role;
 
 @Configuration
 @EnableResourceServer
@@ -51,6 +52,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/user/registration").permitAll()
+                .antMatchers("/actuator/**").hasAuthority(Role.ADMIN.name())
                 .anyRequest().authenticated();
     }
 }
