@@ -3,6 +3,7 @@ server:
 
 service-secrets:
   user-service: USER_SERVICE_PASSWORD
+  debts-service: DEBTS_SERVICE_PASSWORD
 
 eureka:
   client:
