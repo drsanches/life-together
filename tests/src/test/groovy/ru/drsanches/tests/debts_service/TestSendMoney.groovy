@@ -1,4 +1,4 @@
-package ru.drsanches.tests.user_service.debts
+package ru.drsanches.tests.debts_service
 
 import groovyx.net.http.ContentType
 import groovyx.net.http.HttpResponseDecorator

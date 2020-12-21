@@ -1,4 +1,4 @@
-package ru.drsanches.tests.user_service.auth
+package ru.drsanches.tests.auth_service
 
 import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.HttpResponseException

@@ -21,9 +21,6 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Value("${service-secrets.user-service}")
     String userServiceSecret;
 
-    @Value("${service-secrets.debts-service}")
-    String debtsServiceSecret;
-
     @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
@@ -43,11 +40,6 @@ public class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .and()
                 .withClient("user-service")
                 .secret(userServiceSecret)
-                .authorizedGrantTypes("client_credentials", "refresh_token")
-                .scopes("server")
-                .and()
-                .withClient("debts-service")
-                .secret(debtsServiceSecret)
                 .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("server");
     }

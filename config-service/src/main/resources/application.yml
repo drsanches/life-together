@@ -1,4 +1,4 @@
-#TODO: set security
+#TODO: fix actuator access
 
 server:
   port: 8081
