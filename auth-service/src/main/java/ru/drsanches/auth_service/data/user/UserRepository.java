@@ -1,4 +1,4 @@
-package ru.drsanches.auth_service.data;
+package ru.drsanches.auth_service.data.user;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

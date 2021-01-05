@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ru.drsanches.auth_service.data.dto.ChangePasswordDTO;
 import ru.drsanches.auth_service.service.UserService;
-import ru.drsanches.auth_service.data.User;
+import ru.drsanches.auth_service.data.user.User;
 import ru.drsanches.common.dto.ChangeUsernameDTO;
 import ru.drsanches.common.dto.DisableUserDTO;
 import java.security.Principal;
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PreAuthorize("#oauth2.hasScope('server')")
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void createUser(@RequestBody User user) {
         userService.create(user);
@@ -53,6 +54,12 @@ public class UserController {
     public void changeUsername(@RequestBody ChangeUsernameDTO changeUsernameDTO) {
         removeTokens(changeUsernameDTO.getOldUsername());
         userService.changeUsername(changeUsernameDTO.getOldUsername(), changeUsernameDTO.getNewUsername());
+    }
+
+    @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
+    public void changePassword(Principal principal, @RequestBody ChangePasswordDTO changePasswordDTO) {
+        removeTokens(principal.getName());
+        userService.changePassword(principal.getName(), changePasswordDTO);
     }
 
     //TODO: Rename
