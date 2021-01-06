@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.drsanches.user_service.data.dto.UserDTO;
+import ru.drsanches.user_service.data.dto.UserInfoDTO;
 import ru.drsanches.user_service.service.FriendsService;
 import java.security.Principal;
 import java.util.Set;
@@ -25,7 +25,7 @@ public class FriendsController {
     private FriendsService friendsService;
 
     @RequestMapping(path = "", method = RequestMethod.GET)
-    public Set<UserDTO> getFriends(Principal principal) {
+    public Set<UserInfoDTO> getFriends(Principal principal) {
         return friendsService.getFriends(principal.getName());
     }
 
@@ -41,12 +41,12 @@ public class FriendsController {
     }
 
     @RequestMapping(path = "/requests/incoming", method = RequestMethod.GET)
-    public Set<UserDTO> getIncomingRequests(Principal principal) {
+    public Set<UserInfoDTO> getIncomingRequests(Principal principal) {
         return friendsService.getIncomingRequests(principal.getName());
     }
 
     @RequestMapping(path = "/requests/outgoing", method = RequestMethod.GET)
-    public Set<UserDTO> getOutgoingRequests(Principal principal) {
+    public Set<UserInfoDTO> getOutgoingRequests(Principal principal) {
         return friendsService.getOutgoingRequests(principal.getName());
     }
 

@@ -9,7 +9,7 @@ import spock.lang.Specification
 
 class TestGetCurrentUser extends Specification {
 
-    String PATH = "auth/current"
+    String PATH = "/auth/current"
 
     def "successful current user getting"() {
         given: "user with token"

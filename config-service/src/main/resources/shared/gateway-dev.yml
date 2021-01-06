@@ -16,7 +16,13 @@ zuul:
   routes:
     auth-service:
       path: /auth/**
-      url: http://localhost:8084
+      url: http://localhost:8084/auth
+      stripPrefix: true
+      sensitiveHeaders:
+
+    auth-service-token:
+      path: /oauth/**
+      url: http://localhost:8084/oauth
       stripPrefix: true
       sensitiveHeaders:
 

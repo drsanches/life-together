@@ -10,7 +10,7 @@ import ru.drsanches.user_service.client.DebtsClient;
 import ru.drsanches.user_service.data.friends.Friends;
 import ru.drsanches.user_service.data.friends.FriendsRepository;
 import ru.drsanches.user_service.data.user.User;
-import ru.drsanches.user_service.data.dto.UserDTO;
+import ru.drsanches.user_service.data.dto.UserInfoDTO;
 import ru.drsanches.user_service.data.user.UserRepository;
 import java.util.Optional;
 import java.util.Set;
@@ -33,7 +33,7 @@ public class FriendsService {
     @Autowired
     private DebtsClient debtsClient;
 
-    public Set<UserDTO> getFriends(String username) {
+    public Set<UserInfoDTO> getFriends(String username) {
         User user = getUserIfExists(username);
         Set<User> outgoing = user.getOutgoingRequests().stream().map(Friends::getToUser).collect(Collectors.toSet());
         Set<User> incoming = user.getIncomingRequests().stream().map(Friends::getFromUser).collect(Collectors.toSet());
@@ -72,14 +72,14 @@ public class FriendsService {
         log.info("User '{}' has been deleted from all friends", user.toString());
     }
 
-    public Set<UserDTO> getIncomingRequests(String username) {
+    public Set<UserInfoDTO> getIncomingRequests(String username) {
         User user = getUserIfExists(username);
         Set<User> outgoing = user.getOutgoingRequests().stream().map(Friends::getToUser).collect(Collectors.toSet());
         Set<User> incoming = user.getIncomingRequests().stream().map(Friends::getFromUser).collect(Collectors.toSet());
         return incoming.stream().filter(x -> !outgoing.contains(x)).map(userConverter::convertToDTO).collect(Collectors.toSet());
     }
 
-    public Set<UserDTO> getOutgoingRequests(String username) {
+    public Set<UserInfoDTO> getOutgoingRequests(String username) {
         User user = getUserIfExists(username);
         Set<User> outgoing = user.getOutgoingRequests().stream().map(Friends::getToUser).collect(Collectors.toSet());
         Set<User> incoming = user.getIncomingRequests().stream().map(Friends::getFromUser).collect(Collectors.toSet());

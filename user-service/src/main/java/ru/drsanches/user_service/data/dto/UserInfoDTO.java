@@ -1,6 +1,6 @@
 package ru.drsanches.user_service.data.dto;
 
-public class UserDTO {
+public class UserInfoDTO {
 
     private String id;
 
@@ -10,7 +10,7 @@ public class UserDTO {
 
     private String lastName;
 
-    public UserDTO(String id, String username, String firstName, String lastName) {
+    public UserInfoDTO(String id, String username, String firstName, String lastName) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;

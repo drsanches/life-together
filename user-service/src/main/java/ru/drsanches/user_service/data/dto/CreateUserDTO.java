@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 //TODO: Add validation
-public class UserAuthDTO {
+public class CreateUserDTO {
 
     private String id;
 
@@ -14,7 +14,7 @@ public class UserAuthDTO {
     @NotNull
     private String password;
 
-    public UserAuthDTO() {
+    public CreateUserDTO() {
         id = UUID.randomUUID().toString();
     }
 

@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.drsanches.user_service.data.dto.UserAuthDTO;
-import ru.drsanches.user_service.data.dto.UserDTO;
+import ru.drsanches.user_service.data.dto.CreateUserDTO;
+import ru.drsanches.user_service.data.dto.UpdateUserDTO;
+import ru.drsanches.user_service.data.dto.UserInfoDTO;
+import ru.drsanches.user_service.data.dto.UsernameDTO;
 import ru.drsanches.user_service.service.UserService;
-import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -28,18 +29,23 @@ public class UserController {
 
     @RequestMapping(path = "/registration", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(@RequestBody UserAuthDTO user) {
+    public UserInfoDTO createUser(@RequestBody CreateUserDTO user) {
         return userService.create(user);
     }
 
     @RequestMapping(path = "/current", method = RequestMethod.GET)
-    public UserDTO getCurrentUser(Principal principal) {
+    public UserInfoDTO getCurrentUser(Principal principal) {
         return userService.findByUsername(principal.getName());
     }
 
     @RequestMapping(path = "/current", method = RequestMethod.PUT)
-    public UserDTO updateCurrentUser(Principal principal, @RequestBody UserDTO user) {
-        return userService.update(principal.getName(), user);
+    public UserInfoDTO updateCurrentUser(Principal principal, @RequestBody UpdateUserDTO updateUserDTO) {
+        return userService.update(principal.getName(), updateUserDTO);
+    }
+
+    @RequestMapping(path = "/current/changeUsername", method = RequestMethod.PUT)
+    public UserInfoDTO changeUsername(Principal principal, @RequestBody UsernameDTO usernameDTO) {
+        return userService.changeUsername(principal.getName(), usernameDTO.getUsername());
     }
 
     @RequestMapping(path = "/current", method = RequestMethod.DELETE)
@@ -48,7 +54,7 @@ public class UserController {
     }
 
     @RequestMapping(path = "/{username}", method = RequestMethod.GET)
-    public UserDTO getUser(@PathVariable String username) {
+    public UserInfoDTO getUser(@PathVariable String username) {
         return userService.findByUsername(username);
     }
 

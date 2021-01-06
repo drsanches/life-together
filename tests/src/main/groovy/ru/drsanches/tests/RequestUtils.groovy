@@ -83,6 +83,24 @@ class RequestUtils {
         }
     }
 
+    static JSONObject changeUsername(String username, String password, String newUsername) {
+        String token = getToken(username, password)
+        if (token == null) {
+            return null
+        }
+        try {
+            HttpResponseDecorator response = getUserRestClient().put(
+                    path: '/user/current/changeUsername',
+                    headers: ["Authorization": "Bearer $token"],
+                    body:  [username: newUsername],
+                    requestContentType : ContentType.JSON)
+            return response.status == 200 ? response.getData() : null
+        } catch(Exception e) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
     static void sendFriendRequest(String username, String password, String friendUsername) {
         String token = getToken(username, password)
         getUserRestClient().post(
@@ -210,7 +228,7 @@ class RequestUtils {
         try {
             String client = "browser:".bytes.encodeBase64().toString()
             HttpResponseDecorator response = getAuthRestClient().post(
-                    path: "auth/oauth/token", //Use 'path: /oauth/token' for test without gateway
+                    path: "oauth/token",
                     headers: [
                             //TODO: Fix in code
                             "Authorization": "Basic $client"

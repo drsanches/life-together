@@ -20,6 +20,7 @@ import ru.drsanches.common.dto.DisableUserDTO;
 import java.security.Principal;
 
 @RestController
+@RequestMapping(value = "/auth")
 public class UserController {
 
     private final Logger log = LoggerFactory.getLogger(UserController.class);
@@ -36,27 +37,27 @@ public class UserController {
     }
 
     @PreAuthorize("#oauth2.hasScope('server')")
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void createUser(@RequestBody User user) {
         userService.create(user);
     }
 
     @PreAuthorize("#oauth2.hasScope('server')")
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/current", method = RequestMethod.DELETE)
     public void disableUser(@RequestBody DisableUserDTO disableUserDTO) {
         removeTokens(disableUserDTO.getOldUsername());
         userService.disable(disableUserDTO.getId(), disableUserDTO.getNewUsername());
     }
 
     @PreAuthorize("#oauth2.hasScope('server')")
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @RequestMapping(value = "/current/changeUsername", method = RequestMethod.PUT)
     public void changeUsername(@RequestBody ChangeUsernameDTO changeUsernameDTO) {
         removeTokens(changeUsernameDTO.getOldUsername());
         userService.changeUsername(changeUsernameDTO.getOldUsername(), changeUsernameDTO.getNewUsername());
     }
 
-    @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
+    @RequestMapping(value = "/current/changePassword", method = RequestMethod.PUT)
     public void changePassword(Principal principal, @RequestBody ChangePasswordDTO changePasswordDTO) {
         removeTokens(principal.getName());
         userService.changePassword(principal.getName(), changePasswordDTO);

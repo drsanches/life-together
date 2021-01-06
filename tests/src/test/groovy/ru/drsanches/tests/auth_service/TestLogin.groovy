@@ -9,7 +9,7 @@ import spock.lang.Specification
 
 class TestLogin extends Specification {
 
-    String PATH = "auth/oauth/token" //Use "/oauth/token" for testing without gateway
+    String PATH = "/oauth/token"
 
     def "successful login"() {
         given: "user"

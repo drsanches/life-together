@@ -9,7 +9,7 @@ import spock.lang.Specification
 
 class TestChangePassword extends Specification {
 
-    String PATH = "/auth/changePassword"
+    String PATH = "/auth/current/changePassword"
 
     def "success password change"() {
         given: "registered user, old and new passwords"

@@ -16,7 +16,7 @@ security:
       grant-type: client_credentials
       scope: server
     resource:
-      userInfoUri: http://auth-service:8084/current
+      userInfoUri: http://auth-service:8084/auth/current
 
 spring:
   application:

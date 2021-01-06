@@ -9,9 +9,10 @@ import org.springframework.util.StringUtils;
 import ru.drsanches.common.dto.ChangeUsernameDTO;
 import ru.drsanches.common.dto.DisableUserDTO;
 import ru.drsanches.user_service.client.AuthClient;
-import ru.drsanches.user_service.data.dto.UserDTO;
+import ru.drsanches.user_service.data.dto.UpdateUserDTO;
+import ru.drsanches.user_service.data.dto.UserInfoDTO;
 import ru.drsanches.user_service.data.user.User;
-import ru.drsanches.user_service.data.dto.UserAuthDTO;
+import ru.drsanches.user_service.data.dto.CreateUserDTO;
 import ru.drsanches.user_service.data.user.UserRepository;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,35 +35,41 @@ public class UserService {
     private UserConverter userConverter;
 
     //TODO: Make transaction
-    public UserDTO create(UserAuthDTO userAuthDTO) {
-        checkNonexistentUser(userAuthDTO.getUsername());
+    public UserInfoDTO create(CreateUserDTO createUserDTO) {
+        checkNonexistentUser(createUserDTO.getUsername());
         String id = UUID.randomUUID().toString();
-        userAuthDTO.setId(id);
-        authClient.createUser(userAuthDTO);
+        createUserDTO.setId(id);
+        authClient.createUser(createUserDTO);
         User user = new User(id);
-        user.setUsername(userAuthDTO.getUsername());
+        user.setUsername(createUserDTO.getUsername());
         userRepository.save(user);
         log.info("New user has been created: {}", user.toString());
         return userConverter.convertToDTO(user);
     }
 
-    public UserDTO findByUsername(String username) {
+    public UserInfoDTO findByUsername(String username) {
         return userConverter.convertToDTO(getUserIfExists(username));
     }
 
-    //TODO: Make transaction
-    public UserDTO update(String username, UserDTO userDTO) {
+    public UserInfoDTO update(String username, UpdateUserDTO updateUserDTO) {
         User current = getUserIfExists(username);
-        if (!StringUtils.isEmpty(userDTO.getUsername()) && !userDTO.getUsername().equals(username)) {
-            checkNonexistentUser(userDTO.getUsername());
-            current.setUsername(userDTO.getUsername());
-            authClient.changeUsername(new ChangeUsernameDTO(username, userDTO.getUsername()));
-            log.info("Change username request was sent to auth-service: old username = {}, new username = {}", username, userDTO.getUsername());
-        }
-        current.setFirstName(userDTO.getFirstName());
-        current.setLastName(userDTO.getLastName());
+        current.setFirstName(updateUserDTO.getFirstName());
+        current.setLastName(updateUserDTO.getLastName());
         userRepository.save(current);
         log.info("User has been updated: {}", current.toString());
+        return userConverter.convertToDTO(current);
+    }
+
+    //TODO: Make transaction
+    public UserInfoDTO changeUsername(String username, String newUsername) {
+        Assert.isTrue(!username.equals(newUsername), "Old and new usernames are equal");
+        Assert.isTrue(!StringUtils.isEmpty(newUsername), "New username is empty");
+        User current = getUserIfExists(username);
+        checkNonexistentUser(newUsername);
+        current.setUsername(newUsername);
+        authClient.changeUsername(new ChangeUsernameDTO(username, newUsername));
+        userRepository.save(current);
+        log.info("Username has been changed: {}. Old username: {}", current.toString(), username);
         return userConverter.convertToDTO(current);
     }
 
