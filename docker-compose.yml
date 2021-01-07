@@ -4,7 +4,7 @@
 #
 # RUN:
 # docker-compose build
-# docker compose up
+# docker-compose up
 
 version: '3'
 
@@ -12,12 +12,16 @@ services:
   config-service:
     build: config-service/
     restart: always
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
     ports:
       - 8081:8081
 
   registry-service:
     build: registry-service/
     restart: always
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
     depends_on:
       - config-service
     ports:
@@ -26,6 +30,13 @@ services:
   auth-service:
     build: auth-service/
     restart: always
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+      USER_SERVICE_PASSWORD: ${USER_SERVICE_PASSWORD}
+      DEBTS_SERVICE_PASSWORD: ${DEBTS_SERVICE_PASSWORD}
+      AUTH_SERVICE_DB_USERNAME: ${AUTH_SERVICE_DB_USERNAME}
+      AUTH_SERVICE_DB_PASSWORD: ${AUTH_SERVICE_DB_PASSWORD}
+      AUTH_SERVICE_DB_NAME: ${AUTH_SERVICE_DB_NAME}
     depends_on:
       - config-service
       - registry-service
@@ -36,6 +47,12 @@ services:
   user-service:
     build: user-service/
     restart: always
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+      USER_SERVICE_PASSWORD: ${USER_SERVICE_PASSWORD}
+      USER_SERVICE_DB_USERNAME: ${USER_SERVICE_DB_USERNAME}
+      USER_SERVICE_DB_PASSWORD: ${USER_SERVICE_DB_PASSWORD}
+      USER_SERVICE_DB_NAME: ${USER_SERVICE_DB_NAME}
     depends_on:
       - config-service
       - registry-service
@@ -46,6 +63,12 @@ services:
   debts-service:
     build: debts-service/
     restart: always
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+      DEBTS_SERVICE_PASSWORD: ${DEBTS_SERVICE_PASSWORD}
+      DEBTS_SERVICE_DB_USERNAME: ${DEBTS_SERVICE_DB_USERNAME}
+      DEBTS_SERVICE_DB_PASSWORD: ${DEBTS_SERVICE_DB_PASSWORD}
+      DEBTS_SERVICE_DB_NAME: ${DEBTS_SERVICE_DB_NAME}
     depends_on:
       - config-service
       - registry-service
@@ -56,6 +79,8 @@ services:
   gateway:
     build: gateway/
     restart: always
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
     depends_on:
       - config-service
       - registry-service
@@ -69,8 +94,8 @@ services:
 #    volumes:
 #      - ./db/data/:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: pswd
-      POSTGRES_DATABASE: postgres
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DATABASE: ${DB_NAME}
     ports:
       - 5432:5432

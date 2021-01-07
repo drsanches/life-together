@@ -10,7 +10,7 @@ security:
   oauth2:
     client:
       clientId: debts-service
-      clientSecret: DEBTS_SERVICE_PASSWORD
+      clientSecret: ${DEBTS_SERVICE_PASSWORD}
       accessTokenUri: http://auth-service:8084/oauth/token
       tokenInfoUri: http://auth-service:8084/oauth/check_token
       grant-type: client_credentials
@@ -26,10 +26,10 @@ spring:
       enabled: true # TODO: fix access
 
   datasource:
-    url: jdbc:postgresql://database:5432/postgres
+    url: jdbc:postgresql://database:5432/${DEBTS_SERVICE_DB_NAME}
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: pswd
+    username: ${DEBTS_SERVICE_DB_USERNAME}
+    password: ${DEBTS_SERVICE_DB_PASSWORD}
 
   jpa:
     show-sql: false

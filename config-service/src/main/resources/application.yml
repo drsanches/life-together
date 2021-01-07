@@ -14,7 +14,8 @@ spring:
           search-locations: classpath:/shared
   security:
     user:
-      password: CONFIG_SERVICE_PASSWORD
+      #TODO: use 2 profiles (dev and docker) or do something with env for dev
+      password: ${CONFIG_SERVICE_PASSWORD}
 
 logging:
   level:

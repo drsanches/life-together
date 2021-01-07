@@ -3,10 +3,10 @@ spring:
     name: gateway-dev
   cloud:
     config:
-      uri: "http://localhost:8081"
+      uri: http://localhost:8081
       fail-fast: true
       username: user
-      password: CONFIG_SERVICE_PASSWORD
+      password: ${CONFIG_SERVICE_PASSWORD}
 
 logging:
   level:

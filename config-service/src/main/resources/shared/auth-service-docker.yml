@@ -2,8 +2,8 @@ server:
   port: 8084
 
 service-secrets:
-  user-service: USER_SERVICE_PASSWORD
-  debts-service: DEBTS_SERVICE_PASSWORD
+  user-service: ${USER_SERVICE_PASSWORD}
+  debts-service: ${DEBTS_SERVICE_PASSWORD}
 
 eureka:
   client:
@@ -16,11 +16,13 @@ spring:
   h2: # http://localhost:8084/h2-console/
     console:
       enabled: true # TODO: fix access
+
   datasource:
-    url: jdbc:postgresql://database:5432/postgres
+    url: jdbc:postgresql://database:5432/${AUTH_SERVICE_DB_NAME}
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: pswd
+    username: ${AUTH_SERVICE_DB_USERNAME}
+    password: ${AUTH_SERVICE_DB_PASSWORD}
+
   jpa:
     show-sql: false
     database-platform: postgres
