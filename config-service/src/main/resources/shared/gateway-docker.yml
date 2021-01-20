@@ -40,6 +40,6 @@ zuul:
 
     debts-service:
       path: /debts/**
-      url: http://debts-service:8086
-      stripPrefix: false
+      url: http://debts-service:8086/debts
+      stripPrefix: true
       sensitiveHeaders:

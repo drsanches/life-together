@@ -14,8 +14,8 @@ services:
     restart: always
     environment:
       CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
-    ports:
-      - 8081:8081
+#    ports: #remove ports in production
+#      - 8081:8081
 
   registry-service:
     build: registry-service/
@@ -24,8 +24,8 @@ services:
       CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
     depends_on:
       - config-service
-    ports:
-      - 8761:8761
+#    ports: #remove ports in production
+#      - 8761:8761
 
   auth-service:
     build: auth-service/
@@ -41,8 +41,8 @@ services:
       - config-service
       - registry-service
       - database
-    ports:
-    - 8084:8084
+#    ports: #remove ports in production
+#      - 8084:8084
 
   user-service:
     build: user-service/
@@ -57,8 +57,8 @@ services:
       - config-service
       - registry-service
       - database
-    ports:
-    - 8085:8085
+#    ports: #remove ports in production
+#      - 8085:8085
 
   debts-service:
     build: debts-service/
@@ -73,8 +73,8 @@ services:
       - config-service
       - registry-service
       - database
-    ports:
-    - 8086:8086
+#    ports: #remove ports in production
+#      - 8086:8086
 
   gateway:
     build: gateway/
@@ -97,5 +97,5 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DATABASE: ${DB_NAME}
-    ports:
-      - 5432:5432
+#    ports: #remove ports in production
+#      - 5432:5432
